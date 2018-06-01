@@ -8,6 +8,7 @@
   "scripts": {
     "protoc": "protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --proto_path=src/proto --ts_out=./src/proto --js_out=import_style=commonjs,binary:./src/proto src/proto/blockchain.proto",
     "start": "nodemon --config nodemon.json",
+    "debug": "node debug/index.js",
     "build": "tsc",
     "precommit": "lint-staged"
   },

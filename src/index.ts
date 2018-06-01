@@ -1,11 +1,15 @@
-import Web3 from "web3";
+import Web3 from 'web3';
 import {
   Provider,
   HttpProvider,
   IpcProvider,
   WebsocketProvider
-} from "web3/types";
-import { sendTransactionHandler, getBlockNumberHandler } from "./handers";
+} from 'web3/types';
+import {
+  sendTransactionHandler,
+  getBlockNumberHandler,
+  getBlockHandler
+} from './handers';
 
 const CITAWeb3 = (
   provider: Provider | string
@@ -24,6 +28,8 @@ const CITAWeb3 = (
     web3.eth.sendTransaction,
     sendTransactionHandler
   );
+
+  web3.eth.getBlock = new Proxy(web3.eth.getBlock, getBlockHandler);
 
   return web3;
 };
