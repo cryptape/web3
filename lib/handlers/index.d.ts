@@ -23,6 +23,9 @@ export declare const request: (
 export declare const sendTransactionHandler: {
   apply: (target: Function, thisArg: any, argumentsList: any) => Promise<any>;
 };
+export declare const sendSignedTransactionHandler: {
+  apply: (target: Function, thisArg: any, argumentsList: any) => Promise<any>;
+};
 export declare const getBlockNumberHandler: {
   apply: (target: Function, thisArg: any, argumentsList: any) => any;
 };

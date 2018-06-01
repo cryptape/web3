@@ -53,6 +53,22 @@ export const sendTransactionHandler = {
 };
 
 /**
+ * @method sendRawCitaTransaction
+ */
+export const sendSignedTransactionHandler = {
+  apply: async function(target: Function, thisArg: any, argumentsList: any) {
+    const signedTx = argumentsList[0];
+    if (signedTx === 'eth') {
+      return target(argumentsList[1]);
+    }
+    return request(
+      thisArg.currentProvider.host,
+      rpcParams('cita_sendTransaction', [signedTx])
+    );
+  }
+};
+
+/**
  * @method getCitaBlockNumber
  */
 export const getBlockNumberHandler = {

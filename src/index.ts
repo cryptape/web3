@@ -7,6 +7,7 @@ import {
 } from 'web3/types';
 import {
   sendTransactionHandler,
+  sendSignedTransactionHandler,
   getBlockNumberHandler,
   getBlockHandler,
   getTransactionHandler,
@@ -40,6 +41,16 @@ const CITAWeb3 = (
   web3.eth.sendTransaction = new Proxy(
     web3.eth.sendTransaction,
     sendTransactionHandler
+  );
+
+  /**
+   * @method sendSignedTransaction
+   * @param {string} signed_tx - send signed transaction to ethereum or cita, same as sendTransaction
+   */
+
+  web3.eth.sendSignedTransaction = new Proxy(
+    web3.eth.sendSignedTransaction,
+    sendSignedTransactionHandler
   );
 
   /**
