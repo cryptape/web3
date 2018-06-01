@@ -64,6 +64,9 @@ export const getBlockNumberHandler = {
   }
 };
 
+/**
+ * @method getCitaBlock
+ */
 export const getBlockHandler = {
   apply: function(target: Function, thisArg: any, argumentsList: any) {
     const hashOrNumber = argumentsList[0];
@@ -89,4 +92,24 @@ export const getBlockHandler = {
       ])
     );
   }
+};
+
+export const getTransactionHandler = {
+  apply: function(target: Function, thisArg: any, argumentsList: any) {
+    if (argumentsList[0] === 'eth') {
+      return target(argumentsList[1]);
+    }
+    return request(
+      thisArg.currentProvider.host,
+      rpcParams('cita_getTransaction', [argumentsList[0]])
+    );
+  }
+};
+
+/**
+ * @method getMetaData
+ */
+
+export const getMetaDataHandler = (host: string, number: string) => {
+  return request(host, rpcParams('cita_getMetaData', [number]));
 };

@@ -8,7 +8,9 @@ module.exports = {
         'eslint-plugin-typescript',
     ],
     'rules': {
-        'prettier/prettier': 'error',
+        "prettier/prettier": ["error", {
+            "singleQuote": true
+        }],
         'quotes': ['error', 'single']
     },
     'parserOptions': {

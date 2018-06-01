@@ -29,3 +29,10 @@ export declare const getBlockNumberHandler: {
 export declare const getBlockHandler: {
   apply: (target: Function, thisArg: any, argumentsList: any) => any;
 };
+export declare const getTransactionHandler: {
+  apply: (target: Function, thisArg: any, argumentsList: any) => any;
+};
+export declare const getMetaDataHandler: (
+  host: string,
+  number: string
+) => AxiosPromise<RPCResponse>;
