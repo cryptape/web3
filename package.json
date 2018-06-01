@@ -1,6 +1,6 @@
 {
   "name": "@cita/web3",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "main": "lib/index.js",
   "repository": "https://github.com/CITA-Toys/web3",
   "author": "Keith <keithwhisper@gmail.com>",
@@ -40,6 +40,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "elliptic": "^6.4.0",
+    "google-protobuf": "^3.5.0",
     "web3": "^1.0.0-beta.34"
   }
 }
