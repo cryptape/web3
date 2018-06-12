@@ -1,6 +1,6 @@
 {
   "name": "@cita/web3",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "main": "lib/index.js",
   "repository": "https://github.com/CITA-Toys/web3",
   "author": "Keith <keithwhisper@gmail.com>",
@@ -10,6 +10,7 @@
     "start": "nodemon --config nodemon.json",
     "debug": "node debug/index.js",
     "build": "tsc && cp -r ./src/cita-proto ./lib",
+    "browserify": "browserify ./lib/index.js -o ./lib/bundle.js",
     "precommit": "lint-staged"
   },
   "lint-staged": {
@@ -22,6 +23,7 @@
     "@types/google-protobuf": "^3.2.7",
     "@types/node": "^10.1.4",
     "@types/underscore": "^1.8.8",
+    "browserify": "^16.2.2",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-config-prettier": "^2.9.0",

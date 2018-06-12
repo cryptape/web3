@@ -77,5 +77,8 @@ const CITAWeb3 = (provider: Provider | string, CustomWeb3: IWeb3 = Web3) => {
 
   return Object.assign(web3, { cita });
 };
+if (window) {
+  Object.assign(window, { CITAWeb3 });
+}
 
 export default CITAWeb3;
