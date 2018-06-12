@@ -1,7 +1,8 @@
-import blockchainPb from '../proto/blockchain_pb';
+import blockchainPb from '../cita-proto/blockchain_pb';
 
 const EC = require('elliptic').ec;
 const utils = require('web3-utils');
+var sha3 = require('crypto-js/sha3');
 
 const ec = new EC('secp256k1');
 
@@ -12,7 +13,7 @@ export interface CITASendTransactionArugments {
   quota: number;
   validUntilBlock: number;
   data: string;
-  value: number;
+  value: string;
   chainId: number;
   version: number;
   [index: string]: any;
@@ -45,7 +46,10 @@ export default (txParams: CITASendTransactionArugments): string => {
 
   const hex = utils.bytesToHex(msg);
 
-  const hash = utils.sha3(hex);
+  // const hash = utils.sha3(hex)
+  const hash = sha3(hex.slice(2), {
+    outputLength: 256
+  }).toString();
 
   // old style
   const key = ec.keyFromPrivate(txParams.privkey, 'hex');
@@ -64,6 +68,19 @@ export default (txParams: CITASendTransactionArugments): string => {
   unverifiedTransaction.setTransaction(tx);
   unverifiedTransaction.setCrypto(blockchainPb.Crypto.SECP);
   unverifiedTransaction.setSignature(bytes);
+
+  console.log('signature');
+  console.log(bytes);
+
+  console.log('tx binary');
+  console.log(msg);
+
+  console.log('hex');
+  console.log(hex);
+
+  console.log('hash');
+  console.log(hash);
+  console.log(new Buffer(hash));
 
   return utils.bytesToHex(unverifiedTransaction.serializeBinary());
 };

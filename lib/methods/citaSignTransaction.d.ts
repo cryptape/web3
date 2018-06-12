@@ -5,7 +5,7 @@ export interface CITASendTransactionArugments {
   quota: number;
   validUntilBlock: number;
   data: string;
-  value: number;
+  value: string;
   chainId: number;
   version: number;
   [index: string]: any;

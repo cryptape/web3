@@ -15,13 +15,10 @@ import {
   RPCParams,
   RPCResponse
 } from './handlers';
+type IWeb3 = typeof Web3;
 
-const CITAWeb3 = (
-  provider: Provider | string
-  // CustomWeb3?: Web3
-) => {
-  // const web3 = CustomWeb3 ? new Web3(provider) : new CustomWeb3(provider)
-  const web3 = new Web3(provider);
+const CITAWeb3 = (provider: Provider | string, CustomWeb3: IWeb3 = Web3) => {
+  const web3 = new CustomWeb3(provider);
 
   // add get cita block number
 
