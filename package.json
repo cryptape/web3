@@ -11,6 +11,7 @@
     "debug": "node debug/index.js",
     "build": "tsc && cp -r ./src/proto/*.js ./lib/",
     "docs": "typedoc --out ./documents/ ./src/",
+    "test": "jest",
     "browserify": "browserify ./lib/index.js -o ./lib/bundle.js && minify ./lib/bundle.js -d ./lib",
     "precommit": "lint-staged"
   },
@@ -34,6 +35,7 @@
     "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-typescript": "^0.12.0",
     "husky": "^0.14.3",
+    "jest": "^23.1.0",
     "lint-staged": "^7.1.2",
     "nodemon": "^1.17.5",
     "prettier": "^1.13.3",

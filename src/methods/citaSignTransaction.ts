@@ -68,19 +68,5 @@ export default (txParams: CITASendTransactionArugments): string => {
   unverifiedTransaction.setTransaction(tx);
   unverifiedTransaction.setCrypto(blockchainPb.Crypto.SECP);
   unverifiedTransaction.setSignature(bytes);
-
-  console.log('signature');
-  console.log(bytes);
-
-  console.log('tx binary');
-  console.log(msg);
-
-  console.log('hex');
-  console.log(hex);
-
-  console.log('hash');
-  console.log(hash);
-  console.log(new Buffer(hash));
-
   return utils.bytesToHex(unverifiedTransaction.serializeBinary());
 };

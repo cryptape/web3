@@ -45,7 +45,7 @@ export const sendTransactionHandler = {
       const unverifiedTransactionData = citaSignTransaction(tx);
       return request(
         thisArg.currentProvider.host,
-        rpcParams('cita_sendTransaction', [unverifiedTransactionData.slice(2)])
+        rpcParams('cita_sendTransaction', [unverifiedTransactionData])
       );
     }
     return target(...argumentsList);
@@ -63,7 +63,7 @@ export const sendSignedTransactionHandler = {
     }
     return request(
       thisArg.currentProvider.host,
-      rpcParams('cita_sendTransaction', [signedTx])
+      rpcParams('cita_sendWRawTransaction', [signedTx])
     );
   }
 };
