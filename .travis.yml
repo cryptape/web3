@@ -7,7 +7,10 @@ cache:
     - node_modules
 before_install:
   - npm install
+git:
+  submodules: false
 script:
-  - npm submodule update
+  - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+  - git submodulei update --init --recursive
   - npm run build
   - npm test
