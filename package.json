@@ -1,15 +1,16 @@
 {
-  "name": "@cita/web3",
-  "version": "0.1.7",
+  "name": "@nervos/web3",
+  "version": "0.16.0",
   "main": "lib/index.js",
   "repository": "https://github.com/CITA-Toys/web3",
   "author": "Keith <keithwhisper@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "protoc": "protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --proto_path=src/cita-proto --ts_out=./src/cita-proto --js_out=import_style=commonjs,binary:./src/cita-proto src/cita-proto/blockchain.proto",
+    "protoc": "protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --proto_path=src/proto --ts_out=./src/proto --js_out=import_style=commonjs,binary:./src/proto src/proto/blockchain.proto",
     "start": "nodemon --config nodemon.json",
     "debug": "node debug/index.js",
-    "build": "tsc && cp -r ./src/cita-proto ./lib",
+    "build": "tsc && cp -r ./src/proto/*.js ./lib/",
+    "docs": "typedoc --out ./documents/ ./src/",
     "browserify": "browserify ./lib/index.js -o ./lib/bundle.js && minify ./lib/bundle.js -d ./lib",
     "precommit": "lint-staged"
   },
@@ -19,6 +20,7 @@
       "git add"
     ]
   },
+  "docs": "typedoc --theme markdown",
   "devDependencies": {
     "@types/google-protobuf": "^3.2.7",
     "@types/node": "^10.1.4",
@@ -37,6 +39,8 @@
     "prettier": "^1.13.3",
     "ts-node": "^6.0.5",
     "ts-protoc-gen": "^0.7.3",
+    "typedoc": "^0.11.1",
+    "types-bn": "^0.0.1",
     "typescript": "^2.8.4",
     "typescript-eslint-parser": "^15.0.0"
   },

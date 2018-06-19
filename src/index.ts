@@ -1,9 +1,9 @@
 import Web3 from 'web3';
 import {
-  Provider,
-  HttpProvider,
-  IpcProvider,
-  WebsocketProvider
+  Provider
+  // HttpProvider,
+  // IpcProvider,
+  // WebsocketProvider,
 } from 'web3/types';
 import {
   sendTransactionHandler,
@@ -11,9 +11,9 @@ import {
   getBlockNumberHandler,
   getBlockHandler,
   getTransactionHandler,
-  getMetaDataHandler,
-  RPCParams,
-  RPCResponse
+  getMetaDataHandler
+  // RPCParams,
+  // RPCResponse,
 } from './handlers';
 type IWeb3 = typeof Web3;
 
@@ -29,7 +29,7 @@ const CITAWeb3 = (provider: Provider | string, CustomWeb3: IWeb3 = Web3) => {
   web3.eth.getBlockNumber = new Proxy(
     web3.eth.getBlockNumber,
     getBlockNumberHandler
-  );
+  ) as typeof web3.eth.getBlockNumber;
   // add send cita transaction
   /**
    * @method sendTransaction
@@ -38,7 +38,7 @@ const CITAWeb3 = (provider: Provider | string, CustomWeb3: IWeb3 = Web3) => {
   web3.eth.sendTransaction = new Proxy(
     web3.eth.sendTransaction,
     sendTransactionHandler
-  );
+  ) as typeof web3.eth.sendTransaction;
 
   /**
    * @method sendSignedTransaction
@@ -48,7 +48,7 @@ const CITAWeb3 = (provider: Provider | string, CustomWeb3: IWeb3 = Web3) => {
   web3.eth.sendSignedTransaction = new Proxy(
     web3.eth.sendSignedTransaction,
     sendSignedTransactionHandler
-  );
+  ) as typeof web3.eth.sendSignedTransaction;
 
   /**
    * @method getTransaction
@@ -58,14 +58,17 @@ const CITAWeb3 = (provider: Provider | string, CustomWeb3: IWeb3 = Web3) => {
   web3.eth.getTransaction = new Proxy(
     web3.eth.getTransaction,
     getTransactionHandler
-  );
+  ) as typeof web3.eth.getTransaction;
 
   /**
    * @method getBlock
    * @param {string} hashOrNumber - if 'eth', request ethereum,
    * @param {string} hashOrNumber - if prev arg == 'eth', this is the hash or number for ethereum
    */
-  web3.eth.getBlock = new Proxy(web3.eth.getBlock, getBlockHandler);
+  web3.eth.getBlock = new Proxy(
+    web3.eth.getBlock,
+    getBlockHandler
+  ) as typeof web3.eth.getBlock;
 
   /**
    * cita specific method
@@ -77,8 +80,5 @@ const CITAWeb3 = (provider: Provider | string, CustomWeb3: IWeb3 = Web3) => {
 
   return Object.assign(web3, { cita });
 };
-if (window) {
-  Object.assign(window, { CITAWeb3 });
-}
 
 export default CITAWeb3;
