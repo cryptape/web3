@@ -8,5 +8,6 @@ cache:
 before_install:
   - npm install
 script:
+  - npm submodule update
   - npm run build
   - npm test
