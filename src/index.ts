@@ -1,10 +1,5 @@
 import Web3 from 'web3';
-import {
-  Provider
-  // HttpProvider,
-  // IpcProvider,
-  // WebsocketProvider,
-} from 'web3/types';
+import { Provider } from 'web3/types';
 import {
   sendTransactionHandler,
   sendSignedTransactionHandler,
@@ -12,28 +7,33 @@ import {
   getBlockHandler,
   getTransactionHandler,
   getMetaDataHandler
-  // RPCParams,
-  // RPCResponse,
 } from './handlers';
-type IWeb3 = typeof Web3;
+import citaSignTransaction, {
+  CITASendTransactionArugments
+} from './methods/citaSignTransaction';
 
-const CITAWeb3 = (provider: Provider | string, CustomWeb3: IWeb3 = Web3) => {
+type CustomWeb3 = typeof Web3;
+
+const CITAWeb3 = (
+  provider: Provider | string,
+  CustomWeb3: CustomWeb3 = Web3
+) => {
   const web3 = new CustomWeb3(provider);
-
-  // add get cita block number
 
   /**
    * @method getBlockNumber
-   * @param eth - if eth === 'eth', request ethereum block number, else request cita block number
+   * @param {string} [chainType] - If chainType === 'eth', request block number of Ethereum, else request block number of CITA
+   * @return {Promise<number>} - Promise to return block number
    */
   web3.eth.getBlockNumber = new Proxy(
     web3.eth.getBlockNumber,
     getBlockNumberHandler
   ) as typeof web3.eth.getBlockNumber;
-  // add send cita transaction
+
   /**
    * @method sendTransaction
-   * @param {object} tx - send transaction to ethereum or cita, according to if tx has quota
+   * @param {object} transaction - If transaction includes field of quota, send transaction to CITA, else send transaction to Ethereum
+   * @return {Promise<TransactionReceipt>}
    */
   web3.eth.sendTransaction = new Proxy(
     web3.eth.sendTransaction,
@@ -43,6 +43,8 @@ const CITAWeb3 = (provider: Provider | string, CustomWeb3: IWeb3 = Web3) => {
   /**
    * @method sendSignedTransaction
    * @param {string} signed_tx - send signed transaction to ethereum or cita, same as sendTransaction
+   * @param {string} [chainType] - If chainType === 'eth', send signed transaction to Ethereum
+   * @return {Promise<TransactionReceipt>}
    */
 
   web3.eth.sendSignedTransaction = new Proxy(
@@ -52,8 +54,8 @@ const CITAWeb3 = (provider: Provider | string, CustomWeb3: IWeb3 = Web3) => {
 
   /**
    * @method getTransaction
-   * @param {string} txHash - if 'eth', request ethereum
-   * @param {string} txHash - if request ethereum, this is the hash of transaction
+   * @param {string} txHash -  Hash of transaction
+   * @param {string} [chainType] - if chainType === 'eth', request Ethereum
    */
   web3.eth.getTransaction = new Proxy(
     web3.eth.getTransaction,
@@ -62,8 +64,9 @@ const CITAWeb3 = (provider: Provider | string, CustomWeb3: IWeb3 = Web3) => {
 
   /**
    * @method getBlock
-   * @param {string} hashOrNumber - if 'eth', request ethereum,
-   * @param {string} hashOrNumber - if prev arg == 'eth', this is the hash or number for ethereum
+   * @param {string} hashOrNumber - Hash or Number of Block
+   * @param {string} [txInfo] - If true, CITA will return block with transaction content, else return block with transaction hash
+   * @param {string} [chainType] - If chainType === 'eth', request Ethereum
    */
   web3.eth.getBlock = new Proxy(
     web3.eth.getBlock,
@@ -75,7 +78,8 @@ const CITAWeb3 = (provider: Provider | string, CustomWeb3: IWeb3 = Web3) => {
    */
   const cita = {
     getMetaData: (number: string = 'latest') =>
-      getMetaDataHandler(provider as string, number)
+      getMetaDataHandler(provider as string, number),
+    sign: (tx: CITASendTransactionArugments) => citaSignTransaction(tx)
   };
 
   return Object.assign(web3, { cita });

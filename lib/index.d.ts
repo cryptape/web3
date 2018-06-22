@@ -1,4 +1,5 @@
 import Web3 from 'web3';
+import { CITASendTransactionArugments } from './methods/citaSignTransaction';
 declare const CITAWeb3: (
   provider:
     | string
@@ -11,6 +12,7 @@ declare const CITAWeb3: (
     getMetaData: (
       number?: string
     ) => import('../../../../../../../Users/ChenYu/Documents/cryptape/projects/web3/node_modules/axios').AxiosPromise;
+    sign: (tx: CITASendTransactionArugments) => string;
   };
 };
 export default CITAWeb3;

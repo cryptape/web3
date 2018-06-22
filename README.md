@@ -5,14 +5,30 @@
 
 The Web3 for CITA
 
+The methods below has been updated for CITA:
+
+- web3.cita.getMetaData(blockNumber): Promise<Metadata>
+
+- web3.cita.CITASendTransactionArugments(transaction): SignedTransaction
+
+- web3.eth.getBlockNumber(chainType): Promise<BlockNumber>
+
+- web3.eth.sendTransaction(transaction, chainType): Promise<TransactionReceipt>
+
+- web3.eth.sendSignedTransaction(signedTransaction, chainType): Promise<TransactionReceipt>
+
+- web3.eth.getTransaction(transactioHash, chainType): Promise<Transaction>
+
+- web3.eth.getBlock(hashOrNumber, transactionInfo, chainType): Promise<Block>
+
 ```javascript
-const CITAWeb3 = require('@cita/web3')
+const NervosWeb3 = require('@nervos/web3')
 const chain = 'http://localhost:1337'
-const webe = CITAWeb3.default(chain)
+const web3 = NervosWeb3.default(chain)
 
 /**
  * @method getMetaData
- * @returns {object} - {
+ * @returns {Promise<Metadata>} - {
  *   jsonrpc: '2.0',
  *   id: 415,
  *   result: {
@@ -37,47 +53,57 @@ web3.cita.getMetaData().then(res => {
 })
 
 /**
+ * @method citaSignTransaction
+ * @param {object} transaction - transaction for CITA
+ * @return {string} - SignedTransaction
+ */
+web3.cita.citaSignTransaction('transaction')
+
+/**
  * @method getBlockNumber
- * @param {string} isEth - optional, if isEth == 'eth', returns block number of ethereum
- * @returns {object} - {
+ * @param {string} [chainType] - If chainType === 'eth', returns block number of Ethereum
+ * @returns {Promise<BlockNumber>} - {
  *   jsonrpc: "2.0",
  *   id: "1",
  *   result: "0x0"
  * }
  */
+
 web3.eth.getBlockNumber().then(res => {
   console.log(res)
 })
 
 /**
  * @method getBlock
- * @param {string} hashOrNumber - if hashOrNumber == 'eth', require the second param and returns block from ethereum
- * @param {string} hashOrNumber - required when previous param == 'eth'
- * @returns {object} {
+ * @param {string} hashOrNumber - Hash or Number of Block
+ * @param {boolean} [transactionInfo] - If true, return block with trnasaction content, else return block with transaction hash
+ * @param {string} [chainType] - if chainType === 'eth', request block of Ethereum
+ * @returns {Promise<Block>} - {
  *   jsonrpc: "2.0",
  *   id: "1",
  *   result: block
  * }
  */
 
-web3.eth.getBlock('blockNumber or blockHash').then(res => {
+web3.eth.getBlock('blockNumberOrHash').then(res => {
   console.log(res)
 })
 
 /**
  * @method sendTransaction
- * @param {object} tx - transaction object with privkey, for example {
- *  from: '0x627306090abaB3A6e1400e9345bC60c78a8BEf57',
- *  privkey: '0x627306090abaB3A6e1400e9345bC60c78a8BEf57',
- *  nonce: 100,
- *  quota: 100,
- *  data: '0x627306090abaB3A6e1400e9345bC60c78a8BEf57',
- *  value: 0,
- *  chainId: 1,
- *  version: 0
+ * @param {object} transaction - transaction object with privkey,
+ *  for example {
+ *   from: '0x627306090abaB3A6e1400e9345bC60c78a8BEf57',
+ *   privkey: '0x627306090abaB3A6e1400e9345bC60c78a8BEf57',
+ *   nonce: 100,
+ *   quota: 100,
+ *   data: '0x627306090abaB3A6e1400e9345bC60c78a8BEf57',
+ *   value: 0,
+ *   chainId: 1,
+ *   version: 0
  * }
- * You can also use it as native sendTransaction
- * @return {object} - {
+ * You can also use it as native sendTransaction with standard ethereum transaction
+ * @return {Promise<TransactionReceipt>} - {
  *   jsonprc: "2.0",
  *   id: "1",
  *   result: {
@@ -104,16 +130,26 @@ web3.eth.sendTransaction(tx).then(res => {
 
 /**
  * @method getTransaction
- * @param {string} transactionHash - if transactionHash == 'eth', require the second param
- * @param {string} transactionHash
- * @return {object} - {
+ * @param {string} transactionHash - Hash of transaction
+ * @param {string} [chainType] - if chainType === 'eth', request transaction of Ethereum
+ * @return {Promise<Transaction>} - {
  *   jsonrpc: "2.0",
  *   id: "1",
  *   result: transaction
  * }
  */
 
-web3.eth.getTransaction(tx).then(res => {
+web3.eth.getTransaction('transactionHash').then(res => {
+  console.log(res)
+})
+
+/**
+ * @method sendSignedTransaction
+ * @param {string} signedTransaction - Signed Transaction
+ * @param {string} [chainType] - if chainType === 'eth', request transaction of Ethereum
+ * @return {Promise<TransactionReceipt>}
+ */
+web3.eth.sendSignedTransaction('signedTransaction').then(res => {
   console.log(res)
 })
 ```

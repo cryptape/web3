@@ -528,12 +528,19 @@ export namespace BlockTxs {
 }
 
 export class BlackList extends jspb.Message {
-  clearSignerList(): void;
-  getSignerList(): Array<Uint8Array | string>;
-  getSignerList_asU8(): Array<Uint8Array>;
-  getSignerList_asB64(): Array<string>;
-  setSignerList(value: Array<Uint8Array | string>): void;
-  addSigner(value: Uint8Array | string, index?: number): Uint8Array | string;
+  clearBlackListList(): void;
+  getBlackListList(): Array<Uint8Array | string>;
+  getBlackListList_asU8(): Array<Uint8Array>;
+  getBlackListList_asB64(): Array<string>;
+  setBlackListList(value: Array<Uint8Array | string>): void;
+  addBlackList(value: Uint8Array | string, index?: number): Uint8Array | string;
+
+  clearClearListList(): void;
+  getClearListList(): Array<Uint8Array | string>;
+  getClearListList_asU8(): Array<Uint8Array>;
+  getClearListList_asB64(): Array<string>;
+  setClearListList(value: Array<Uint8Array | string>): void;
+  addClearList(value: Uint8Array | string, index?: number): Uint8Array | string;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): BlackList.AsObject;
@@ -555,7 +562,8 @@ export class BlackList extends jspb.Message {
 
 export namespace BlackList {
   export type AsObject = {
-    signerList: Array<Uint8Array | string>;
+    blackListList: Array<Uint8Array | string>;
+    clearListList: Array<Uint8Array | string>;
   };
 }
 

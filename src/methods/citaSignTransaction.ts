@@ -1,4 +1,4 @@
-import blockchainPb from '../proto/blockchain_pb';
+import blockchainPb from '../../proto-ts/blockchain_pb';
 
 const EC = require('elliptic').ec;
 const utils = require('web3-utils');

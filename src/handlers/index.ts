@@ -38,14 +38,14 @@ export const sendTransactionHandler = {
   apply: async function(target: Function, thisArg: any, argumentsList: any) {
     const tx = argumentsList[0];
 
-    if (tx.quota) {
+    if (tx.quota !== undefined) {
       if (typeof tx.validUntilBlock === 'undefined') {
         tx.validUntilBlock = +(await thisArg.getBlockNumber()).result + 88;
       }
       const unverifiedTransactionData = citaSignTransaction(tx);
       return request(
         thisArg.currentProvider.host,
-        rpcParams('cita_sendTransaction', [unverifiedTransactionData])
+        rpcParams('sendRawTransaction', [unverifiedTransactionData])
       );
     }
     return target(...argumentsList);
@@ -58,12 +58,13 @@ export const sendTransactionHandler = {
 export const sendSignedTransactionHandler = {
   apply: async function(target: Function, thisArg: any, argumentsList: any) {
     const signedTx = argumentsList[0];
-    if (signedTx === 'eth') {
-      return target(argumentsList[1]);
+    const chainType = argumentsList[1];
+    if (chainType === 'eth') {
+      return target(signedTx);
     }
     return request(
       thisArg.currentProvider.host,
-      rpcParams('cita_sendWRawTransaction', [signedTx])
+      rpcParams('sendRawTransaction', [signedTx])
     );
   }
 };
@@ -73,10 +74,11 @@ export const sendSignedTransactionHandler = {
  */
 export const getBlockNumberHandler = {
   apply: function(target: Function, thisArg: any, argumentsList: any) {
-    if (argumentsList[0] === 'eth') {
-      return target(...argumentsList);
+    const chainType = argumentsList[0];
+    if (chainType === 'eth') {
+      return target();
     }
-    return request(thisArg.currentProvider.host, rpcParams('cita_blockNumber'));
+    return request(thisArg.currentProvider.host, rpcParams('blockNumber'));
   }
 };
 
@@ -86,38 +88,36 @@ export const getBlockNumberHandler = {
 export const getBlockHandler = {
   apply: function(target: Function, thisArg: any, argumentsList: any) {
     const hashOrNumber = argumentsList[0];
-    if (hashOrNumber === 'eth') {
-      return target(...argumentsList.slice(1));
+    const txInfo = argumentsList[1] || false;
+    const chainType = argumentsList[argumentsList.length - 1];
+    if (chainType === 'eth') {
+      return target(hashOrNumber);
     }
 
     if (hashOrNumber.length === 66) {
       return request(
         thisArg.currentProvider.host,
-        rpcParams('cita_getBlockByHash', [
-          hashOrNumber,
-          argumentsList[1] || false
-        ])
+        rpcParams('getBlockByHash', [hashOrNumber, txInfo])
       );
     }
 
     return request(
       thisArg.currentProvider.host,
-      rpcParams('cita_getBlockByNumber', [
-        hashOrNumber,
-        argumentsList[1] || false
-      ])
+      rpcParams('getBlockByNumber', [hashOrNumber, txInfo])
     );
   }
 };
 
 export const getTransactionHandler = {
   apply: function(target: Function, thisArg: any, argumentsList: any) {
-    if (argumentsList[0] === 'eth') {
-      return target(argumentsList[1]);
+    const txHash = argumentsList[0];
+    const chainType = argumentsList[1];
+    if (chainType === 'eth') {
+      return target(txHash);
     }
     return request(
       thisArg.currentProvider.host,
-      rpcParams('cita_getTransaction', [argumentsList[0]])
+      rpcParams('getTransaction', [txHash])
     );
   }
 };
@@ -127,5 +127,5 @@ export const getTransactionHandler = {
  */
 
 export const getMetaDataHandler = (host: string, number: string) => {
-  return request(host, rpcParams('cita_getMetaData', [number]));
+  return request(host, rpcParams('getMetaData', [number]));
 };

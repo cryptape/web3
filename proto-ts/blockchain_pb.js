@@ -3084,7 +3084,7 @@ if (goog.DEBUG && !COMPILED) {
  * @private {!Array<number>}
  * @const
  */
-proto.BlackList.repeatedFields_ = [1];
+proto.BlackList.repeatedFields_ = [1,2];
 
 
 
@@ -3115,7 +3115,8 @@ proto.BlackList.prototype.toObject = function(opt_includeInstance) {
  */
 proto.BlackList.toObject = function(includeInstance, msg) {
   var f, obj = {
-    signerList: msg.getSignerList_asB64()
+    blackListList: msg.getBlackListList_asB64(),
+    clearListList: msg.getClearListList_asB64()
   };
 
   if (includeInstance) {
@@ -3154,7 +3155,11 @@ proto.BlackList.deserializeBinaryFromReader = function(msg, reader) {
     switch (field) {
     case 1:
       var value = /** @type {!Uint8Array} */ (reader.readBytes());
-      msg.addSigner(value);
+      msg.addBlackList(value);
+      break;
+    case 2:
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
+      msg.addClearList(value);
       break;
     default:
       reader.skipField();
@@ -3185,10 +3190,17 @@ proto.BlackList.prototype.serializeBinary = function() {
  */
 proto.BlackList.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getSignerList_asU8();
+  f = message.getBlackListList_asU8();
   if (f.length > 0) {
     writer.writeRepeatedBytes(
       1,
+      f
+    );
+  }
+  f = message.getClearListList_asU8();
+  if (f.length > 0) {
+    writer.writeRepeatedBytes(
+      2,
       f
     );
   }
@@ -3196,40 +3208,40 @@ proto.BlackList.serializeBinaryToWriter = function(message, writer) {
 
 
 /**
- * repeated bytes signer = 1;
+ * repeated bytes black_list = 1;
  * @return {!(Array<!Uint8Array>|Array<string>)}
  */
-proto.BlackList.prototype.getSignerList = function() {
+proto.BlackList.prototype.getBlackListList = function() {
   return /** @type {!(Array<!Uint8Array>|Array<string>)} */ (jspb.Message.getRepeatedField(this, 1));
 };
 
 
 /**
- * repeated bytes signer = 1;
- * This is a type-conversion wrapper around `getSignerList()`
+ * repeated bytes black_list = 1;
+ * This is a type-conversion wrapper around `getBlackListList()`
  * @return {!Array.<string>}
  */
-proto.BlackList.prototype.getSignerList_asB64 = function() {
+proto.BlackList.prototype.getBlackListList_asB64 = function() {
   return /** @type {!Array.<string>} */ (jspb.Message.bytesListAsB64(
-      this.getSignerList()));
+      this.getBlackListList()));
 };
 
 
 /**
- * repeated bytes signer = 1;
+ * repeated bytes black_list = 1;
  * Note that Uint8Array is not supported on all browsers.
  * @see http://caniuse.com/Uint8Array
- * This is a type-conversion wrapper around `getSignerList()`
+ * This is a type-conversion wrapper around `getBlackListList()`
  * @return {!Array.<!Uint8Array>}
  */
-proto.BlackList.prototype.getSignerList_asU8 = function() {
+proto.BlackList.prototype.getBlackListList_asU8 = function() {
   return /** @type {!Array.<!Uint8Array>} */ (jspb.Message.bytesListAsU8(
-      this.getSignerList()));
+      this.getBlackListList()));
 };
 
 
 /** @param {!(Array<!Uint8Array>|Array<string>)} value */
-proto.BlackList.prototype.setSignerList = function(value) {
+proto.BlackList.prototype.setBlackListList = function(value) {
   jspb.Message.setField(this, 1, value || []);
 };
 
@@ -3238,13 +3250,66 @@ proto.BlackList.prototype.setSignerList = function(value) {
  * @param {!(string|Uint8Array)} value
  * @param {number=} opt_index
  */
-proto.BlackList.prototype.addSigner = function(value, opt_index) {
+proto.BlackList.prototype.addBlackList = function(value, opt_index) {
   jspb.Message.addToRepeatedField(this, 1, value, opt_index);
 };
 
 
-proto.BlackList.prototype.clearSignerList = function() {
-  this.setSignerList([]);
+proto.BlackList.prototype.clearBlackListList = function() {
+  this.setBlackListList([]);
+};
+
+
+/**
+ * repeated bytes clear_list = 2;
+ * @return {!(Array<!Uint8Array>|Array<string>)}
+ */
+proto.BlackList.prototype.getClearListList = function() {
+  return /** @type {!(Array<!Uint8Array>|Array<string>)} */ (jspb.Message.getRepeatedField(this, 2));
+};
+
+
+/**
+ * repeated bytes clear_list = 2;
+ * This is a type-conversion wrapper around `getClearListList()`
+ * @return {!Array.<string>}
+ */
+proto.BlackList.prototype.getClearListList_asB64 = function() {
+  return /** @type {!Array.<string>} */ (jspb.Message.bytesListAsB64(
+      this.getClearListList()));
+};
+
+
+/**
+ * repeated bytes clear_list = 2;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getClearListList()`
+ * @return {!Array.<!Uint8Array>}
+ */
+proto.BlackList.prototype.getClearListList_asU8 = function() {
+  return /** @type {!Array.<!Uint8Array>} */ (jspb.Message.bytesListAsU8(
+      this.getClearListList()));
+};
+
+
+/** @param {!(Array<!Uint8Array>|Array<string>)} value */
+proto.BlackList.prototype.setClearListList = function(value) {
+  jspb.Message.setField(this, 2, value || []);
+};
+
+
+/**
+ * @param {!(string|Uint8Array)} value
+ * @param {number=} opt_index
+ */
+proto.BlackList.prototype.addClearList = function(value, opt_index) {
+  jspb.Message.addToRepeatedField(this, 2, value, opt_index);
+};
+
+
+proto.BlackList.prototype.clearClearListList = function() {
+  this.setClearListList([]);
 };
 
 
