@@ -1,6 +1,6 @@
 {
   "name": "@nervos/web3",
-  "version": "0.16.2",
+  "version": "0.16.3",
   "main": "lib/index.js",
   "repository": "https://github.com/CITA-Toys/web3",
   "author": "Keith <keithwhisper@gmail.com>",
@@ -12,7 +12,7 @@
     "build": "tsc",
     "docs": "typedoc --out ./documents/ ./src/",
     "test": "jest",
-    "browserify": "browserify ./lib/index.js -o ./lib/bundle.js && minify ./lib/bundle.js -d ./lib",
+    "browserify": "browserify ./lib/browser.js -o ./lib/bundle.js && minify ./lib/bundle.js -d ./lib/",
     "precommit": "lint-staged"
   },
   "lint-staged": {

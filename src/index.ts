@@ -14,7 +14,7 @@ import citaSignTransaction, {
 
 type CustomWeb3 = typeof Web3;
 
-const CITAWeb3 = (
+const NervosWeb3 = (
   provider: Provider | string,
   CustomWeb3: CustomWeb3 = Web3
 ) => {
@@ -85,4 +85,4 @@ const CITAWeb3 = (
   return Object.assign(web3, { cita });
 };
 
-export default CITAWeb3;
+export default NervosWeb3;

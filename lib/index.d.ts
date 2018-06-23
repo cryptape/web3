@@ -1,6 +1,6 @@
 import Web3 from 'web3';
 import { CITASendTransactionArugments } from './methods/citaSignTransaction';
-declare const CITAWeb3: (
+declare const NervosWeb3: (
   provider:
     | string
     | import('../../../../../../../Users/ChenYu/Documents/cryptape/projects/web3/node_modules/web3/types').WebsocketProvider
@@ -15,4 +15,4 @@ declare const CITAWeb3: (
     sign: (tx: CITASendTransactionArugments) => string;
   };
 };
-export default CITAWeb3;
+export default NervosWeb3;

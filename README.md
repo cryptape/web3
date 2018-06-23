@@ -9,7 +9,7 @@ The methods below has been updated for CITA:
 
 - web3.cita.getMetaData(blockNumber): Promise<Metadata>
 
-- web3.cita.CITASendTransactionArugments(transaction): SignedTransaction
+- web3.cita.sign(transaction): SignedTransaction
 
 - web3.eth.getBlockNumber(chainType): Promise<BlockNumber>
 
