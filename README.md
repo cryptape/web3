@@ -11,6 +11,10 @@ The methods below has been updated for CITA:
 
 - web3.cita.sign(transaction): SignedTransaction
 
+- web3.cita.parsers.transactionContentParser(content): Transaction
+
+- web3.cita.parsers.transactionParser(transactioBytes): UnverifiedTransaction
+
 - web3.eth.getBlockNumber(chainType): Promise<BlockNumber>
 
 - web3.eth.sendTransaction(transaction, chainType): Promise<TransactionReceipt>
@@ -53,11 +57,37 @@ web3.cita.getMetaData().then(res => {
 })
 
 /**
- * @method citaSignTransaction
+ * @method cita
  * @param {object} transaction - transaction for CITA
  * @return {string} - SignedTransaction
  */
-web3.cita.citaSignTransaction('transaction')
+web3.cita.sign('transaction')
+
+/**
+ * @method transactionParser
+ * @description parse unverified transaction
+ * @param {object} unverifiedTransactionWithContent
+ * @return {UnverifiedTransaction} UnverifiedTransactionWithTransactionObject
+ */
+web3.cita.parsers.transactionParser({
+  hash: '0x88f20dcf69639fc8c4fc81664507d5febc7645b7fa01778cbcf82cec3abf3826',
+  content:
+    '0x0a680a283263633138333735663332613938656663303137643164646562636562643666396565373531353212103432353036616636633234383861623718c0843d20bc900532200000000000000000000000000000000000000000000000000de0b6b3a764000038011241f1be166145fa40a8f694da1e22861acd398d51a1c71d2763323a5c6415b7773d30fda2a307f715365ce62eda0f6a2e1e97e7599e1a4f34540c4f6a584f17711f00',
+  blockNumber: '0x147ee',
+  blockHash:
+    '0x44a66acc5244606ce284bc7295273f3bad1aad5ab13465aa39bd093e6360f368',
+  index: '0x0',
+})
+
+/**
+ * @method transactionContentParser
+ * @description parser transaction content to object
+ * @param {string} transactionContent
+ * @return {object} Transaction
+ */
+web3.cita.parsers.transactionContentParser(
+  '0x0a680a283263633138333735663332613938656663303137643164646562636562643666396565373531353212103432353036616636633234383861623718c0843d20bc900532200000000000000000000000000000000000000000000000000de0b6b3a764000038011241f1be166145fa40a8f694da1e22861acd398d51a1c71d2763323a5c6415b7773d30fda2a307f715365ce62eda0f6a2e1e97e7599e1a4f34540c4f6a584f17711f00',
+)
 
 /**
  * @method getBlockNumber

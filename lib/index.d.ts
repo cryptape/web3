@@ -1,5 +1,6 @@
 import Web3 from 'web3';
 import { CITASendTransactionArugments } from './methods/citaSignTransaction';
+import * as parsers from './methods/parsers';
 declare const NervosWeb3: (
   provider:
     | string
@@ -13,6 +14,7 @@ declare const NervosWeb3: (
       number?: string
     ) => import('../../../../../../../Users/ChenYu/Documents/cryptape/projects/web3/node_modules/axios').AxiosPromise;
     sign: (tx: CITASendTransactionArugments) => string;
+    parsers: typeof parsers;
   };
 };
 export default NervosWeb3;

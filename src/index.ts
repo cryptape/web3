@@ -11,6 +11,7 @@ import {
 import citaSignTransaction, {
   CITASendTransactionArugments
 } from './methods/citaSignTransaction';
+import * as parsers from './methods/parsers';
 
 type CustomWeb3 = typeof Web3;
 
@@ -79,7 +80,8 @@ const NervosWeb3 = (
   const cita = {
     getMetaData: (number: string = 'latest') =>
       getMetaDataHandler(provider as string, number),
-    sign: (tx: CITASendTransactionArugments) => citaSignTransaction(tx)
+    sign: (tx: CITASendTransactionArugments) => citaSignTransaction(tx),
+    parsers
   };
 
   return Object.assign(web3, { cita });
