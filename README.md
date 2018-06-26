@@ -5,7 +5,7 @@
 
 The Web3 for CITA
 
-The methods below has been updated for CITA:
+The majority of web3 keep update with official [web3](https://github.com/ethereum/web3.js/) and several methods below has been changed for CITA:
 
 - web3.cita.getMetaData(blockNumber): Promise<Metadata>
 
