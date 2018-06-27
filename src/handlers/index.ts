@@ -1,8 +1,5 @@
 import axios, { AxiosResponse, AxiosPromise } from 'axios';
-// import citaSignTransaction from '../methods/citaSignTransaction'
-const {
-  inputTransactionFormatterCita: citaSignTransaction
-} = require('../../cita-web3/lib/web3/formatters');
+import citaSignTransaction from '../methods/citaSignTransaction';
 
 export interface RPCParams {
   jsonrpc: string;

@@ -1,118 +1,77 @@
-/*
-    This file is part of web3.js.
-    web3.js is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-    web3.js is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Lesser General Public License for more details.
-    You should have received a copy of the GNU Lesser General Public License
-    along with web3.js.  If not, see <http://www.gnu.org/licenses/>.
-*/
-/**
- * @file sha3.js
- * @author Marek Kotewicz <marek@ethdev.com>
- * @date 2015
- */
+import blockchainPb from '../../proto-ts/blockchain_pb';
 
+const EC = require('elliptic').ec;
+const utils = require('web3-utils');
 var sha3 = require('crypto-js/sha3');
 
-'use strict';
+const ec = new EC('secp256k1');
 
-// var sha3 = require('../utils/sha3.js')
-// var secp256k1 = require('secp256k1');
-var blockchain = require('../../proto-ts/blockchain_pb');
-// var utils = require('../utils/utils')
-var Buffer = require('buffer').Buffer;
+export interface CITASendTransactionArugments {
+  privkey: string;
+  to?: string;
+  nonce: string;
+  quota: number;
+  validUntilBlock: number;
+  data: string;
+  value: string;
+  chainId: number;
+  version: number;
+  [index: string]: any;
+}
 
-var EC = require('elliptic').ec;
-var ec = new EC('secp256k1');
+export const dataFormatter = (hex: string) => {
+  hex = hex.startsWith('0x') ? hex : '0x' + hex;
+  return new Uint8Array(utils.hexToBytes(hex));
+};
 
-/**
- * Formats the input of a CITA transaction which contains signature
- *
- * @method inputTransactionFormatterCita
- * @param {Object} transaction options
- * @returns protobuf of signed transaction
- */
-var inputTransactionFormatterCita = function(options) {
-  // create Transaction
-  var tx = new blockchain.Transaction();
-  if (!options.nonce) {
-    throw new Error('nonce error');
+export default (txParams: CITASendTransactionArugments): string => {
+  const requires = ['nonce', 'quota', 'validUntilBlock', 'chainId', 'data'];
+  const errors = requires
+    .map(require => (txParams[require] === undefined ? require : null))
+    .filter(error => error);
+  if (errors.length) throw new Error(errors.join() + ' missed');
+
+  console.log('format data');
+  console.log(dataFormatter(txParams.data).join());
+  console.log('end');
+  let tx = new blockchainPb.Transaction();
+  if (txParams.to) {
+    tx.setTo(txParams.to);
   }
-  tx.setNonce(options.nonce);
+  tx.setNonce(txParams.nonce);
+  tx.setQuota(txParams.quota);
+  tx.setValidUntilBlock(+txParams.validUntilBlock);
+  tx.setData(dataFormatter(txParams.data));
+  tx.setValue(txParams.value);
+  tx.setChainId(txParams.chainId);
+  tx.setVersion(txParams.version);
 
-  if (options.quota <= 0) {
-    throw new Error('quota must be more than 0');
-  }
-  tx.setQuota(options.quota);
+  const msg = tx.serializeBinary();
 
-  if (options.to) {
-    tx.setTo(options.to);
-  }
+  const hex = utils.bytesToHex(msg);
 
-  if (!options.validUntilBlock) {
-    throw new Error('vaild until block error');
-  }
-  tx.setValidUntilBlock(options.validUntilBlock);
+  // const hash = utils.sha3(hex)
+  const hash = sha3(hex.slice(2), {
+    outputLength: 256
+  }).toString();
 
-  if (options.chainId < 0) {
-    throw new Error('chain_id error');
-  }
-  tx.setChainId(options.chainId);
-
-  // if (options.data.slice(0, 2) == '0x') {
-  //     options.data = options.data.slice(2);
-  // }
-  tx.setData(new Uint8Array(Buffer.from(options.data, 'hex')));
-
-  var msg = tx.serializeBinary();
-  var hex = msg.reduce(function(r, a) {
-    return r.concat(a.toString(16).padStart(2, '0'));
-  }, '');
-
-  var hash = sha3(hex, { encoding: 'hex' });
-
-  // var sign1 = secp256k1.sign(new Buffer(hash.toString(), 'hex'), new Buffer(options.privkey, 'hex'));
-  // var bytes1 =  new Uint8Array(65);
-  // console.log("sign1 signature: "+ JSON.stringify(sign1.signature));
-  // bytes1.set(sign1.signature);
-  // bytes1[64] = sign1.recovery;
-  // console.log("sign1: ",  bytes1.reduce(function(r,a) {
-  //     return r.concat(a.toString(16).padStart(2, '0'));
-  // }, ""));
-
-  var key = ec.keyFromPrivate(options.privkey, 'hex');
-  var sign = key.sign(new Buffer(hash.toString(), 'hex'));
-  var sign_r = sign.r.toString(16);
-  var sign_s = sign.s.toString(16);
+  // old style
+  const key = ec.keyFromPrivate(txParams.privkey, 'hex');
+  const buffer = new Buffer(hash.toString(), 'hex');
+  const sign = key.sign(buffer);
+  let sign_r = sign.r.toString(16);
+  let sign_s = sign.s.toString(16);
   if (sign_r.length == 63) sign_r = '0' + sign_r;
   if (sign_s.length == 63) sign_s = '0' + sign_s;
-  var signature = sign_r + sign_s;
-  var sign_buffer = new Buffer(signature, 'hex');
-  var bytes = new Uint8Array(65);
+  const signature = sign_r + sign_s;
+  const sign_buffer = new Buffer(signature, 'hex');
+  const bytes = new Uint8Array(65);
   bytes.set(sign_buffer);
   bytes[64] = sign.recoveryParam;
 
-  // create UnverifiedTransaction
-  var tx2 = new blockchain.UnverifiedTransaction();
-  tx2.setTransaction(tx);
-  tx2.setCrypto(blockchain.Crypto.SECP);
-  tx2.setSignature(bytes);
-
-  // get protobuf of UnverifiedTransaction
-  var bytes = tx2.serializeBinary();
-
-  var hexstr = bytes.reduce(function(r, a) {
-    return r.concat(a.toString(16).padStart(2, '0'));
-  }, '');
-
-  hexstr = hexstr.slice(0, 2) == '0x' ? hexstr : '0x' + hexstr;
-
-  return hexstr;
+  const unverifiedTransaction = new blockchainPb.UnverifiedTransaction();
+  unverifiedTransaction.setTransaction(tx);
+  unverifiedTransaction.setCrypto(blockchainPb.Crypto.SECP);
+  unverifiedTransaction.setSignature(bytes);
+  return utils.bytesToHex(unverifiedTransaction.serializeBinary());
 };
-
-export default inputTransactionFormatterCita;

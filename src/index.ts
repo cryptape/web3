@@ -10,11 +10,10 @@ import {
   getTransactionReceiptHandler,
   getBalanceHandler
 } from './handlers';
-// import citaSignTransaction from './methods/citaSignTransaction'
-const {
-  inputTransactionFormatterCita
-} = require('../cita-web3/lib/web3/formatters.js');
-// CITASendTransactionArugments,
+import citaSignTransaction, {
+  CITASendTransactionArugments
+} from './methods/citaSignTransaction';
+
 import * as parsers from './methods/parsers';
 
 type CustomWeb3 = typeof Web3;
@@ -94,12 +93,10 @@ const NervosWeb3 = (
   const cita = {
     getMetaData: (number: string = 'latest') =>
       getMetaDataHandler(provider as string, number),
-    sign: (
-      // tx: CITASendTransactionArugments
-      tx: any
-    ) => inputTransactionFormatterCita(tx),
+    sign: (tx: CITASendTransactionArugments) => citaSignTransaction(tx),
     parsers
   };
+  // tx: any,
 
   return Object.assign(web3, { cita });
 };
