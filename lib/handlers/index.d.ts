@@ -35,6 +35,12 @@ export declare const getBlockHandler: {
 export declare const getTransactionHandler: {
   apply: (target: Function, thisArg: any, argumentsList: any) => any;
 };
+export declare const getTransactionReceiptHandler: {
+  apply: (target: Function, thisArg: any, argumentsList: any) => any;
+};
+export declare const getBalanceHandler: {
+  apply: (target: Function, thisArg: any, argumentsList: any) => any;
+};
 export declare const getMetaDataHandler: (
   host: string,
   number: string

@@ -1,5 +1,8 @@
 import axios, { AxiosResponse, AxiosPromise } from 'axios';
-import citaSignTransaction from '../methods/citaSignTransaction';
+// import citaSignTransaction from '../methods/citaSignTransaction'
+const {
+  inputTransactionFormatterCita: citaSignTransaction
+} = require('../../cita-web3/lib/web3/formatters');
 
 export interface RPCParams {
   jsonrpc: string;
@@ -108,6 +111,7 @@ export const getBlockHandler = {
   }
 };
 
+//TODO: ADD DOC
 export const getTransactionHandler = {
   apply: function(target: Function, thisArg: any, argumentsList: any) {
     const txHash = argumentsList[0];
@@ -118,6 +122,35 @@ export const getTransactionHandler = {
     return request(
       thisArg.currentProvider.host,
       rpcParams('getTransaction', [txHash])
+    );
+  }
+};
+
+//TODO: ADD DOC
+export const getTransactionReceiptHandler = {
+  apply: function(target: Function, thisArg: any, argumentsList: any) {
+    const txHash = argumentsList[0];
+    const chainType = argumentsList[1];
+    if (chainType === 'eth') {
+      return target(txHash);
+    }
+    return request(
+      thisArg.currentProvider.host,
+      rpcParams('getTransactionReceipt', [txHash])
+    );
+  }
+};
+//TODO: ADD DOC
+export const getBalanceHandler = {
+  apply: function(target: Function, thisArg: any, argumentsList: any) {
+    const addr = argumentsList[0];
+    const chainType = argumentsList[1];
+    if (chainType === 'eth') {
+      return target(addr);
+    }
+    return request(
+      thisArg.currentProvider.host,
+      rpcParams('getBalance', [addr, 'latest'])
     );
   }
 };

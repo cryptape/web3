@@ -6,11 +6,15 @@ import {
   getBlockNumberHandler,
   getBlockHandler,
   getTransactionHandler,
-  getMetaDataHandler
+  getMetaDataHandler,
+  getTransactionReceiptHandler,
+  getBalanceHandler
 } from './handlers';
-import citaSignTransaction, {
-  CITASendTransactionArugments
-} from './methods/citaSignTransaction';
+// import citaSignTransaction from './methods/citaSignTransaction'
+const {
+  inputTransactionFormatterCita
+} = require('../cita-web3/lib/web3/formatters.js');
+// CITASendTransactionArugments,
 import * as parsers from './methods/parsers';
 
 type CustomWeb3 = typeof Web3;
@@ -74,13 +78,26 @@ const NervosWeb3 = (
     getBlockHandler
   ) as typeof web3.eth.getBlock;
 
+  web3.eth.getTransactionReceipt = new Proxy(
+    web3.eth.getTransactionReceipt,
+    getTransactionReceiptHandler
+  ) as typeof web3.eth.getTransactionReceipt;
+
+  web3.eth.getBalance = new Proxy(
+    web3.eth.getBalance,
+    getBalanceHandler
+  ) as typeof web3.eth.getBalance;
+
   /**
    * cita specific method
    */
   const cita = {
     getMetaData: (number: string = 'latest') =>
       getMetaDataHandler(provider as string, number),
-    sign: (tx: CITASendTransactionArugments) => citaSignTransaction(tx),
+    sign: (
+      // tx: CITASendTransactionArugments
+      tx: any
+    ) => inputTransactionFormatterCita(tx),
     parsers
   };
 

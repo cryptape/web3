@@ -1,43 +1,25 @@
-/*
-    This file is part of web3.js.
-    web3.js is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-    web3.js is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Lesser General Public License for more details.
-    You should have received a copy of the GNU Lesser General Public License
-    along with web3.js.  If not, see <http://www.gnu.org/licenses/>.
-*/
-/**
- * @file sha3.js
- * @author Marek Kotewicz <marek@ethdev.com>
- * @date 2015
- */
+import blockchain from '../../proto-ts/blockchain_pb';
 
+const EC = require('elliptic').ec;
+const utils = require('web3-utils');
 var sha3 = require('crypto-js/sha3');
 
-'use strict';
+const ec = new EC('secp256k1');
+export default function(options: any) {
+  options = {
+    from: '0x0438BFcaBdDa99c00aCF0039e6c1F3F2d78EDde5',
+    privkey:
+      '0x2c5c6c187d42e58a4c212a4aab0a3cfa4030256ed82bb3e05706706ab5be9641',
+    nonce: 'ELH1A3',
+    chainId: 1,
+    validUntilBlock: 172964,
+    data:
+      '6060604052341561000f57600080fd5b60d38061001d6000396000f3006060604052600436106049576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806360fe47b114604e5780636d4ce63c14606e575b600080fd5b3415605857600080fd5b606c60048080359060200190919050506094565b005b3415607857600080fd5b607e609e565b6040518082815260200191505060405180910390f35b8060008190555050565b600080549050905600a165627a7a723058202d9a0979adf6bf48461f24200e635bc19cd1786efbcfc0608eb1d76114d405860029',
+    version: 0,
+    value: 0
+  };
+  console.log(options);
 
-// var sha3 = require('../utils/sha3.js')
-// var secp256k1 = require('secp256k1');
-var blockchain = require('../../proto-ts/blockchain_pb');
-// var utils = require('../utils/utils')
-var Buffer = require('buffer').Buffer;
-
-var EC = require('elliptic').ec;
-var ec = new EC('secp256k1');
-
-/**
- * Formats the input of a CITA transaction which contains signature
- *
- * @method inputTransactionFormatterCita
- * @param {Object} transaction options
- * @returns protobuf of signed transaction
- */
-var inputTransactionFormatterCita = function(options) {
   // create Transaction
   var tx = new blockchain.Transaction();
   if (!options.nonce) {
@@ -68,6 +50,7 @@ var inputTransactionFormatterCita = function(options) {
   //     options.data = options.data.slice(2);
   // }
   tx.setData(new Uint8Array(Buffer.from(options.data, 'hex')));
+  tx.setValue(options.value);
 
   var msg = tx.serializeBinary();
   var hex = msg.reduce(function(r, a) {
@@ -112,7 +95,9 @@ var inputTransactionFormatterCita = function(options) {
 
   hexstr = hexstr.slice(0, 2) == '0x' ? hexstr : '0x' + hexstr;
 
-  return hexstr;
-};
+  console.log('inside');
+  console.log(hexstr);
+  console.log(hexstr.length);
 
-export default inputTransactionFormatterCita;
+  return hexstr;
+}

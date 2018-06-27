@@ -12,6 +12,7 @@
     "build": "tsc",
     "docs": "typedoc --out ./documents/ ./src/",
     "test": "jest",
+    "example": "node examples/deploy.js",
     "browserify": "browserify ./lib/browser.js -o ./lib/bundle.js && minify ./lib/bundle.js -d ./lib/",
     "precommit": "lint-staged"
   },
@@ -44,7 +45,8 @@
     "typedoc": "^0.11.1",
     "types-bn": "^0.0.1",
     "typescript": "^2.8.4",
-    "typescript-eslint-parser": "^15.0.0"
+    "typescript-eslint-parser": "^15.0.0",
+    "utf8": "^3.0.0"
   },
   "dependencies": {
     "axios": "^0.18.0",
