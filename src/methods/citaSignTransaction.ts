@@ -2,6 +2,7 @@ import blockchainPb from '../../proto-ts/blockchain_pb';
 
 const EC = require('elliptic').ec;
 const utils = require('web3-utils');
+var CryptoJS = require('crypto-js');
 var sha3 = require('crypto-js/sha3');
 
 const ec = new EC('secp256k1');
@@ -31,9 +32,6 @@ export default (txParams: CITASendTransactionArugments): string => {
     .filter(error => error);
   if (errors.length) throw new Error(errors.join() + ' missed');
 
-  console.log('format data');
-  console.log(dataFormatter(txParams.data).join());
-  console.log('end');
   let tx = new blockchainPb.Transaction();
   if (txParams.to) {
     tx.setTo(txParams.to);
@@ -48,10 +46,16 @@ export default (txParams: CITASendTransactionArugments): string => {
 
   const msg = tx.serializeBinary();
 
-  const hex = utils.bytesToHex(msg);
+  // has prefix 0x than old style
+  let hex = utils.bytesToHex(msg);
 
-  // const hash = utils.sha3(hex)
-  const hash = sha3(hex.slice(2), {
+  if (hex.length > 2 && hex.substr(0, 2) === '0x') {
+    hex = hex.substr(2);
+  }
+
+  hex = CryptoJS.enc.Hex.parse(hex);
+
+  const hash = sha3(hex, {
     outputLength: 256
   }).toString();
 
