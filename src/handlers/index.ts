@@ -161,6 +161,21 @@ export const ContractHandler = {
   }
 };
 
+// TODO: ADD DOC
+export const callHandler = {
+  apply: function(target: Function, thisArg: any, argumentsList: any) {
+    const args = [...argumentsList];
+    const chainType = args.pop();
+    if (chainType === 'eth') {
+      return target(args);
+    }
+    return request(
+      thisArg.currentProvider.host,
+      rpcParams('call', [...args, chainType])
+    );
+  }
+};
+
 /**
  * @method getMetaData
  */

@@ -44,6 +44,9 @@ export declare const getBalanceHandler: {
 export declare const ContractHandler: {
   construct(target: any, args: ArrayLike<any>): any;
 };
+export declare const callHandler: {
+  apply: (target: Function, thisArg: any, argumentsList: any) => any;
+};
 export declare const getMetaDataHandler: (
   host: string,
   number: string

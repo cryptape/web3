@@ -9,12 +9,15 @@ import {
   getMetaDataHandler,
   getTransactionReceiptHandler,
   getBalanceHandler,
+  callHandler
   // ContractWith,
-  ContractHandler
+  // ContractHandler,
 } from './handlers';
 import citaSignTransaction, {
   CITASendTransactionArugments
 } from './methods/citaSignTransaction';
+import callContract from './methods/callContract';
+const Contract = require('web3-eth-contract');
 
 import * as parsers from './methods/parsers';
 
@@ -89,19 +92,27 @@ const NervosWeb3 = (
     getBalanceHandler
   ) as typeof web3.eth.getBalance;
 
-  web3.eth.Contract = new Proxy(
-    web3.eth.Contract,
-    ContractHandler
-  ) as typeof web3.eth.Contract;
+  // web3.eth.Contract = new Proxy(
+  //   web3.eth.Contract,
+  //   ContractHandler,
+  // ) as typeof web3.eth.Contract
+
+  web3.eth.call = new Proxy(web3.eth.call, callHandler) as typeof web3.eth.call;
 
   /**
    * cita specific method
    */
   const cita = {
+    createTxObject: Contract.prototype._createTxObject,
+    callContract: callContract(web3),
     getMetaData: (number: string = 'latest') =>
       getMetaDataHandler(provider as string, number),
     sign: (tx: CITASendTransactionArugments) => citaSignTransaction(tx),
     parsers,
+    contract: async (abi: any[], addr: string) => {
+      const myContract = new web3.eth.Contract(abi, addr);
+      return myContract;
+    },
     deploy: async (bytecode: string, transaction: any, abi?: string) => {
       const chainId = await cita
         .getMetaData()

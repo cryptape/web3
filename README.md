@@ -25,6 +25,8 @@ The majority of web3 keep update with official [web3](https://github.com/ethereu
 
 - web3.eth.getBlock(hashOrNumber, transactionInfo, chainType): Promise<Block>
 
+- web3.eth.call(...args, eth): Response
+
 ```javascript
 const NervosWeb3 = require('@nervos/web3')
 const chain = 'http://localhost:1337'
@@ -182,4 +184,26 @@ web3.eth.getTransaction('transactionHash').then(res => {
 web3.eth.sendSignedTransaction('signedTransaction').then(res => {
   console.log(res)
 })
+
+/**
+ * @method call
+ * @param {object} args
+ * @param {chainType}
+ * @return {object} Response
+ */
+web3.eth.call('0x0').then(res => console.log(res))
+```
+
+### Deploy Contract
+
+```javascript
+const bytecode = '...'
+const options = {
+  value: 0,
+  privkey: '...',
+  nonce: '01010',
+  version: 0,
+  quota: 99999,
+}
+web3.cita.deploy(bytecode, options).then(receipt => console.log(receipt))
 ```
