@@ -18,6 +18,7 @@ import citaSignTransaction, {
 } from './methods/citaSignTransaction';
 import callContract from './methods/callContract';
 const Contract = require('web3-eth-contract');
+import _executeMethod from './contract';
 
 import * as parsers from './methods/parsers';
 
@@ -28,6 +29,7 @@ const NervosWeb3 = (
   CustomWeb3: CustomWeb3 = Web3
 ) => {
   const web3 = new CustomWeb3(provider);
+  web3.eth.Contract.prototype._executeMethod = _executeMethod;
 
   /**
    * @method getBlockNumber
@@ -102,6 +104,7 @@ const NervosWeb3 = (
   /**
    * cita specific method
    */
+
   const cita = {
     createTxObject: Contract.prototype._createTxObject,
     callContract: callContract(web3),
