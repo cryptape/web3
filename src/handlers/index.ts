@@ -152,6 +152,15 @@ export const getBalanceHandler = {
   }
 };
 
+// TODO: ADD DOC
+export const ContractHandler = {
+  construct(target: any, args: ArrayLike<any>) {
+    if (args[args.length - 1] === 'eth') {
+      return new target(args);
+    }
+  }
+};
+
 /**
  * @method getMetaData
  */

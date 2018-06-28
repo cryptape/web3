@@ -60,7 +60,10 @@ export default (txParams: CITASendTransactionArugments): string => {
   }).toString();
 
   // old style
-  const key = ec.keyFromPrivate(txParams.privkey, 'hex');
+  const privkey = txParams.privkey.startsWith('0x')
+    ? txParams.privkey.slice(2)
+    : txParams.privkey;
+  const key = ec.keyFromPrivate(privkey, 'hex');
   const buffer = new Buffer(hash.toString(), 'hex');
   const sign = key.sign(buffer);
   let sign_r = sign.r.toString(16);

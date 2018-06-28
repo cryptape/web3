@@ -9,42 +9,15 @@ const bytecode =
 const abi = JSON.parse(
   '[{"constant":false,"inputs":[{"name":"_value","type":"uint256"}],"name":"set","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"get","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}]'
 );
-bytecode;
-console.log(abi);
 const privkey =
-  '0x2c5c6c187d42e58a4c212a4aab0a3cfa4030256ed82bb3e05706706ab5be9641';
-const account = web3.eth.accounts.privateKeyToAccount(privkey);
-account;
-
-web3.eth.getBlockNumber().then(({ result }: any) => {
-  const validUntilBlock = +result + 88;
-  const chainId = 1;
-
-  const tx = {
-    privkey: account.privateKey,
-    from: account.address,
-    data: '0x' + bytecode,
-    validUntilBlock,
-    quota: 99999,
-    chainId,
-    to: account.address,
-    nonce: 1000,
-    value: '0',
-    version: 0
-  };
-
-  web3.eth.getBalance(account.address).then(({ result }: any) => {
-    console.log('balance - quota');
-    console.log(result - 99999);
-  });
-
-  web3.eth.sendTransaction(tx).then(({ result }: any) => {
-    const { hash } = result;
-    console.log(hash);
-    setTimeout(() => {
-      // web3.eth.getTransaction(hash).then(console.log)
-      console.log(tx);
-      web3.eth.getTransactionReceipt(hash).then(console.log);
-    }, 10000);
-  });
-});
+  '0x6df169367e91caab0f63120aeb296fce34fd21e95dedd635f2d0cce3f5c8e47f ';
+// new web3.eth.Contract(abi, bytecode)
+const tx = {
+  privkey,
+  data: bytecode,
+  quota: 9999999,
+  nonce: 1000,
+  value: '0',
+  version: 0
+};
+web3.cita.deploy(bytecode, tx).then(console.log);

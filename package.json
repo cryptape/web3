@@ -1,6 +1,6 @@
 {
   "name": "@nervos/web3",
-  "version": "0.17.7",
+  "version": "0.17.8",
   "main": "lib/index.js",
   "repository": "https://github.com/CITA-Toys/web3",
   "author": "Keith <keithwhisper@gmail.com>",

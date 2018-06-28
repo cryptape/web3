@@ -8,7 +8,9 @@ import {
   getTransactionHandler,
   getMetaDataHandler,
   getTransactionReceiptHandler,
-  getBalanceHandler
+  getBalanceHandler,
+  // ContractWith,
+  ContractHandler
 } from './handlers';
 import citaSignTransaction, {
   CITASendTransactionArugments
@@ -87,6 +89,11 @@ const NervosWeb3 = (
     getBalanceHandler
   ) as typeof web3.eth.getBalance;
 
+  web3.eth.Contract = new Proxy(
+    web3.eth.Contract,
+    ContractHandler
+  ) as typeof web3.eth.Contract;
+
   /**
    * cita specific method
    */
@@ -94,11 +101,60 @@ const NervosWeb3 = (
     getMetaData: (number: string = 'latest') =>
       getMetaDataHandler(provider as string, number),
     sign: (tx: CITASendTransactionArugments) => citaSignTransaction(tx),
-    parsers
-  };
-  // tx: any,
+    parsers,
+    deploy: async (bytecode: string, transaction: any, abi?: string) => {
+      const chainId = await cita
+        .getMetaData()
+        .then((res: any) => res.result.chainId);
 
-  return Object.assign(web3, { cita });
+      const currentHeight = await web3.eth
+        .getBlockNumber()
+        .then((res: any) => res.result);
+
+      console.log(abi);
+
+      const tx = {
+        quota: 999999,
+        version: 0,
+        value: 0,
+        nonce: Math.round(Math.random() * 10),
+        ...transaction,
+        data: bytecode.startsWith('0x') ? bytecode : '0x' + bytecode,
+        validUntilBlock: +currentHeight + 88,
+        chainId
+      };
+      console.log('send transaction');
+      console.log(tx);
+      const result = await web3.eth
+        .sendTransaction(tx)
+        .then((res: any) => res.result);
+
+      if (!result.hash) {
+        return new Error('No Transaction Hash Received');
+      }
+      let remain = 10;
+      return new Promise((resolve, reject) => {
+        let interval = setInterval(() => {
+          remain = remain - 1;
+          if (remain > 0) {
+            web3.eth.getTransactionReceipt(result.hash).then((res: any) => {
+              console.log('receiving receipt');
+              console.log(res);
+              if (res.result) {
+                clearInterval(interval);
+                resolve(res);
+              }
+            });
+          } else {
+            reject('No Receipt Received');
+          }
+        }, 1000);
+      });
+    }
+  };
+
+  const target = Object.assign(web3, { cita });
+  return target;
 };
 
 export default NervosWeb3;
