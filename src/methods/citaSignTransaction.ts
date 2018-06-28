@@ -40,7 +40,10 @@ export default (txParams: CITASendTransactionArugments): string => {
   tx.setQuota(txParams.quota);
   tx.setValidUntilBlock(+txParams.validUntilBlock);
   tx.setData(dataFormatter(txParams.data));
-  tx.setValue(txParams.value);
+  // var uint8array = new TextEncoder().encode(string)
+
+  tx.setValue(new Uint8Array(+txParams.value));
+  // tx.setValue(txParams.value)
   tx.setChainId(txParams.chainId);
   tx.setVersion(txParams.version);
 
@@ -80,5 +83,8 @@ export default (txParams: CITASendTransactionArugments): string => {
   unverifiedTransaction.setTransaction(tx);
   unverifiedTransaction.setCrypto(blockchainPb.Crypto.SECP);
   unverifiedTransaction.setSignature(bytes);
-  return utils.bytesToHex(unverifiedTransaction.serializeBinary());
+  const signedTx = utils.bytesToHex(unverifiedTransaction.serializeBinary());
+  console.log('signed transaction: ');
+  console.log(signedTx);
+  return signedTx;
 };

@@ -15,6 +15,11 @@ declare const NervosWeb3: (
     ) => import('../../../../../../../Users/ChenYu/Documents/cryptape/projects/web3/node_modules/axios').AxiosPromise;
     sign: (tx: CITASendTransactionArugments) => string;
     parsers: typeof parsers;
+    deploy: (
+      bytecode: string,
+      transaction: any,
+      abi?: string | undefined
+    ) => Promise<{}>;
   };
 };
 export default NervosWeb3;
