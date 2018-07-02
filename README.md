@@ -123,10 +123,10 @@ web3.eth.getBlock('blockNumberOrHash').then(res => {
 
 /**
  * @method sendTransaction
- * @param {object} transaction - transaction object with privkey,
+ * @param {object} transaction - transaction object with privateKey,
  *  for example {
  *   from: '0x627306090abaB3A6e1400e9345bC60c78a8BEf57',
- *   privkey: '0x627306090abaB3A6e1400e9345bC60c78a8BEf57',
+ *   privateKey: '0x627306090abaB3A6e1400e9345bC60c78a8BEf57',
  *   nonce: 100,
  *   quota: 100,
  *   data: '0x627306090abaB3A6e1400e9345bC60c78a8BEf57',
@@ -147,7 +147,7 @@ web3.eth.getBlock('blockNumberOrHash').then(res => {
 
 const tx = {
   from: '0x627306090abaB3A6e1400e9345bC60c78a8BEf57',
-  privkey: '0x627306090abaB3A6e1400e9345bC60c78a8BEf57',
+  privateKey: '0x627306090abaB3A6e1400e9345bC60c78a8BEf57',
   nonce: 100,
   quota: 100,
   data: '0x627306090abaB3A6e1400e9345bC60c78a8BEf57',
@@ -200,7 +200,7 @@ web3.eth.call('0x0').then(res => console.log(res))
 const bytecode = '...'
 const options = {
   value: 0,
-  privkey: '...',
+  privateKey: '...',
   nonce: '01010',
   version: 0,
   quota: 99999,

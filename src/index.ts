@@ -10,14 +10,11 @@ import {
   getTransactionReceiptHandler,
   getBalanceHandler,
   callHandler
-  // ContractWith,
-  // ContractHandler,
 } from './handlers';
-import citaSignTransaction, {
-  CITASendTransactionArugments
-} from './methods/citaSignTransaction';
 import callContract from './methods/callContract';
 const Contract = require('web3-eth-contract');
+// const sign = require('@nervos/signer')
+import { default as sign } from '@nervos/signer';
 import _executeMethod from './contract';
 
 import * as parsers from './methods/parsers';
@@ -110,7 +107,8 @@ const NervosWeb3 = (
     callContract: callContract(web3),
     getMetaData: (number: string = 'latest') =>
       getMetaDataHandler(provider as string, number),
-    sign: (tx: CITASendTransactionArugments) => citaSignTransaction(tx),
+    // sign: (tx: CITASendTransactionArugments) => citaSignTransaction(tx),
+    sign,
     parsers,
     contract: async (abi: any[], addr: string) => {
       const myContract = new web3.eth.Contract(abi, addr);

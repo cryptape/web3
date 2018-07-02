@@ -110,6 +110,23 @@
     lodash "^4.17.5"
     to-fast-properties "^2.0.0"
 
+"@nervos/signer@^1.0.7":
+  version "1.0.10"
+  resolved "https://registry.npmjs.org/@nervos/signer/-/signer-1.0.10.tgz#ff3df7fcf28603d0706acabd63041087035b449e"
+  dependencies:
+    "@nervos/web3-plugin" "^0.17.5"
+    ec "^0.0.1"
+    elliptic "^6.4.0"
+    web3 "^1.0.0-beta.34"
+
+"@nervos/web3-plugin@^0.17.5":
+  version "0.17.5"
+  resolved "https://registry.npmjs.org/@nervos/web3-plugin/-/web3-plugin-0.17.5.tgz#1ba3172dac0824a9fb4494dd6dc68c4fe802847a"
+  dependencies:
+    "@types/google-protobuf" "^3.2.7"
+    axios "^0.18.0"
+    google-protobuf "^3.5.0"
+
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"
   resolved "https://registry.npmjs.org/@samverschueren/stream-to-observable/-/stream-to-observable-0.3.0.tgz#ecdf48d532c58ea477acfcab80348424f8d0662f"
@@ -1805,6 +1822,10 @@ duplexer3@^0.1.4:
 duplexer@~0.1.1:
   version "0.1.1"
   resolved "https://registry.npmjs.org/duplexer/-/duplexer-0.1.1.tgz#ace6ff808c1ce66b57d1ebf97977acb02334cfc1"
+
+ec@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.npmjs.org/ec/-/ec-0.0.1.tgz#5579aad6053f2ce337bc712a905188f69450b8e1"
 
 ecc-jsbn@~0.1.1:
   version "0.1.1"

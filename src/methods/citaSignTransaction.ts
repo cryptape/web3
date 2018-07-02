@@ -36,14 +36,14 @@ export default (txParams: CITASendTransactionArugments): string => {
   if (txParams.to) {
     tx.setTo(txParams.to);
   }
-  tx.setNonce(txParams.nonce);
+  tx.setNonce('' + txParams.nonce);
   tx.setQuota(txParams.quota);
   tx.setValidUntilBlock(+txParams.validUntilBlock);
   tx.setData(dataFormatter(txParams.data));
   // var uint8array = new TextEncoder().encode(string)
 
-  tx.setValue(new Uint8Array(+txParams.value));
-  // tx.setValue(txParams.value)
+  // tx.setValue(new Uint8Array(+txParams.value));
+  tx.setValue('' + txParams.value);
   tx.setChainId(txParams.chainId);
   tx.setVersion(txParams.version);
 
