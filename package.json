@@ -1,6 +1,6 @@
 {
   "name": "@nervos/web3",
-  "version": "0.17.13",
+  "version": "0.17.14",
   "main": "lib/index.js",
   "repository": "https://github.com/CITA-Toys/web3",
   "author": "Keith <keithwhisper@gmail.com>",
@@ -49,6 +49,7 @@
     "utf8": "^3.0.0"
   },
   "dependencies": {
+    "@nervos/signer": "^1.0.7",
     "axios": "^0.18.0",
     "crypto-js": "^3.1.9-1",
     "elliptic": "^6.4.0",
