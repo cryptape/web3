@@ -1,5 +1,4 @@
 import Web3 from 'web3';
-import { CITASendTransactionArugments } from './methods/citaSignTransaction';
 import * as parsers from './methods/parsers';
 declare const NervosWeb3: (
   provider:
@@ -18,7 +17,29 @@ declare const NervosWeb3: (
     getMetaData: (
       number?: string
     ) => import('../../../../../../../Users/ChenYu/Documents/cryptape/projects/web3/node_modules/axios').AxiosPromise;
-    sign: (tx: CITASendTransactionArugments) => string;
+    sign: (
+      {
+        privateKey,
+        data,
+        nonce,
+        quota,
+        validUntilBlock,
+        value,
+        version,
+        chainId,
+        to
+      }: {
+        privateKey: string;
+        data?: string | undefined;
+        nonce: string;
+        quota: number;
+        validUntilBlock: string | number;
+        value?: string | undefined;
+        version?: number | undefined;
+        chainId: number;
+        to?: string | undefined;
+      }
+    ) => any;
     parsers: typeof parsers;
     contract: (
       abi: any[],

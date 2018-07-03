@@ -1,5 +1,5 @@
 import axios, { AxiosResponse, AxiosPromise } from 'axios';
-import citaSignTransaction from '../methods/citaSignTransaction';
+import { default as sign } from '@nervos/signer';
 
 export interface RPCParams {
   jsonrpc: string;
@@ -42,7 +42,8 @@ export const sendTransactionHandler = {
       if (typeof tx.validUntilBlock === 'undefined') {
         tx.validUntilBlock = +(await thisArg.getBlockNumber()).result + 88;
       }
-      const unverifiedTransactionData = citaSignTransaction(tx);
+      // const unverifiedTransactionData = citaSignTransaction(tx);
+      const unverifiedTransactionData = sign(tx);
       return request(
         thisArg.currentProvider.host,
         rpcParams('sendRawTransaction', [unverifiedTransactionData])
