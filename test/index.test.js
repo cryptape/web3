@@ -1,11 +1,11 @@
 const CITAWeb3 = require('../lib');
 
-const SERVER = '121.196.200.225:1337';
+const SERVER = 'http://121.196.200.225:1337';
 const web3 = CITAWeb3.default(SERVER);
 
 const tx = {
   from: '0x627306090abaB3A6e1400e9345bC60c78a8BEf57',
-  privkey: '0x627306090abaB3A6e1400e9345bC60c78a8BEf57',
+  privateKey: '0x627306090abaB3A6e1400e9345bC60c78a8BEf57',
   nonce: 100,
   quota: 100,
   data: '0x627306090abaB3A6e1400e9345bC60c78a8BEf57',
