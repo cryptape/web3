@@ -2,7 +2,7 @@
   "name": "@nervos/web3",
   "version": "0.17.14",
   "main": "lib/index.js",
-  "repository": "https://github.com/CITA-Toys/web3",
+  "repository": "https://github.com/cryptape/web3",
   "author": "Keith <keithwhisper@gmail.com>",
   "license": "MIT",
   "scripts": {
