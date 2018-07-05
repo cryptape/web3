@@ -14,7 +14,6 @@ const tx = {
   version: 0
 };
 
-
 test('Get Block Number', async () => {
   const number = await web3.eth.getBlockNumber().then(res => res.result);
   expect(number.startsWith('0x')).toBe(true);
@@ -44,7 +43,6 @@ test('Send Transaction', async () => {
   const receipt = await web3.eth.sendTransaction(tx).then(res => res.result);
   expect(receipt.hash).toBeTruthy();
 });
-
 
 test.skip('Send signed transaction', async () => {
   await web3.eth.getBlockNumber().then(res => {

@@ -148,8 +148,6 @@ const NervosWeb3 = (
         .getBlockNumber()
         .then((res: any) => res.result);
 
-      console.log(abi);
-
       const tx = {
         quota: 999999,
         version: 0,
@@ -160,8 +158,6 @@ const NervosWeb3 = (
         validUntilBlock: +currentHeight + 88,
         chainId
       };
-      console.log('send transaction');
-      console.log(tx);
       const result = await web3.eth
         .sendTransaction(tx)
         .then((res: any) => res.result);
@@ -175,8 +171,6 @@ const NervosWeb3 = (
           remain = remain - 1;
           if (remain > 0) {
             web3.eth.getTransactionReceipt(result.hash).then((res: any) => {
-              console.log('receiving receipt');
-              console.log(res);
               if (res.result) {
                 clearInterval(interval);
                 resolve(res);

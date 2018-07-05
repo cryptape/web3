@@ -51,8 +51,6 @@ export const transactionContentParser = (content: string) => {
     to: tx.getTo ? tx.getTo() : '',
     data: tx.getData ? tx.getData() : '',
     value: tx.getValue ? tx.getValue().toString() : ''
-    // utf8: tx.getData_asU8 ? tx.getData_asU8() : '',
-    // base64: tx.getData_asB64 ? tx.getData_asB64() : '',
   };
 };
 

@@ -30,10 +30,6 @@ And two more important methods has been added to `web3.cita`
 
 The majority of web3 keep update with official [web3](https://github.com/ethereum/web3.js/) and several methods below has been changed for CITA:
 
-- web3.cita.getMetaData(blockNumber): Promise<Metadata>
-
-- web3.cita.getAbi(addr, number): Promise<Abi>
-
 - web3.cita.sign(transaction): SignedTransaction
 
 - web3.cita.parsers.transactionContentParser(content): Transaction
