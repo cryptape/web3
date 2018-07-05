@@ -1,3 +1,4 @@
+import sign from '@nervos/signer'
 /* eslint-disable */
 var _ = require('underscore')
 var core = require('web3-core')
@@ -71,7 +72,7 @@ export default function _executeMethod() {
             formatters.inputDefaultBlockNumberFormatter,
           ],
           // add output formatter for decoding
-          outputFormatter: function(result) {
+          outputFormatter: function (result) {
             return _this._parent._decodeMethodReturn(
               _this._method.outputs,
               result,
@@ -116,12 +117,11 @@ export default function _executeMethod() {
 
         // make sure receipt logs are decoded
         var extraFormatters = {
-          receiptFormatter: function(receipt) {
+          receiptFormatter: function (receipt) {
             if (_.isArray(receipt.logs)) {
               // decode logs
-              var events = _.map(receipt.logs, function(log) {
-                return _this._parent._decodeEventABI.call(
-                  {
+              var events = _.map(receipt.logs, function (log) {
+                return _this._parent._decodeEventABI.call({
                     name: 'ALLEVENTS',
                     jsonInterface: _this._parent.options.jsonInterface,
                   },
@@ -132,7 +132,7 @@ export default function _executeMethod() {
               // make log names keys
               receipt.events = {}
               var count = 0
-              events.forEach(function(ev) {
+              events.forEach(function (ev) {
                 if (ev.event) {
                   // if > 1 of the same event, don't overwrite any existing events
                   if (receipt.events[ev.event]) {
@@ -154,7 +154,7 @@ export default function _executeMethod() {
             }
             return receipt
           },
-          contractDeployFormatter: function(receipt) {
+          contractDeployFormatter: function (receipt) {
             var newContract = _this._parent.clone()
             newContract.options.address = receipt.contractAddress
             return newContract
@@ -165,7 +165,9 @@ export default function _executeMethod() {
           name: 'sendTransaction',
           call: 'sendTransaction',
           params: 1,
-          inputFormatter: [formatters.inputTransactionFormatter],
+          // inputFormatter: [formatters.inputTransactionFormatter],
+          // NOTICE: replace default formatter
+          inputFormatter: [sign],
           requestManager: _this._parent._requestManager,
           accounts: _this.constructor._ethAccounts || _this._ethAccounts, // is eth.accounts (necessary for wallet signing)
           defaultAccount: _this._parent.defaultAccount,
