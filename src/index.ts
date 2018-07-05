@@ -1,6 +1,8 @@
 import Web3 from 'web3';
 import { Provider } from 'web3/types';
 import NervosWeb3Plugin from '@nervos/web3-plugin';
+import { default as sign } from '@nervos/signer';
+const Contract = require('web3-eth-contract');
 
 import {
   sendTransactionHandler,
@@ -11,13 +13,8 @@ import {
   getTransactionReceiptHandler,
   getBalanceHandler,
   callHandler
-  // getMetaDataHandler,
-  // getAbiHandler,
 } from './handlers';
 import callContract from './methods/callContract';
-const Contract = require('web3-eth-contract');
-// const sign = require('@nervos/signer')
-import { default as sign } from '@nervos/signer';
 import _executeMethod from './contract';
 
 import * as parsers from './methods/parsers';

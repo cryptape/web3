@@ -119,15 +119,7 @@
     elliptic "^6.4.0"
     web3 "^1.0.0-beta.34"
 
-"@nervos/web3-plugin@^0.17.5":
-  version "0.17.5"
-  resolved "https://registry.npmjs.org/@nervos/web3-plugin/-/web3-plugin-0.17.5.tgz#1ba3172dac0824a9fb4494dd6dc68c4fe802847a"
-  dependencies:
-    "@types/google-protobuf" "^3.2.7"
-    axios "^0.18.0"
-    google-protobuf "^3.5.0"
-
-"@nervos/web3-plugin@^0.17.7":
+"@nervos/web3-plugin@^0.17.5", "@nervos/web3-plugin@^0.17.7":
   version "0.17.7"
   resolved "https://registry.npmjs.org/@nervos/web3-plugin/-/web3-plugin-0.17.7.tgz#0d3b3492b5f08b543d336131a158687967837345"
   dependencies:
