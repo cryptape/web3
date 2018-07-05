@@ -1,6 +1,6 @@
 {
   "name": "@nervos/web3",
-  "version": "0.17.17",
+  "version": "0.17.18",
   "main": "lib/index.js",
   "repository": "https://github.com/cryptape/web3",
   "author": "Keith <keithwhisper@gmail.com>",
@@ -50,6 +50,7 @@
   },
   "dependencies": {
     "@nervos/signer": "^1.0.12",
+    "@nervos/web3-plugin": "^0.17.7",
     "axios": "^0.18.0",
     "crypto-js": "^3.1.9-1",
     "elliptic": "^6.4.0",
