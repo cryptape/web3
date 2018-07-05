@@ -6,9 +6,33 @@
 
 The Web3 for CITA
 
+First of all, you can access all methods of [web3-plugin](https://www.npmjs.com/package/@nervos/web3-plugin) in `web3.cita`.
+
+And two more important methods has been added to `web3.cita`
+
+- `web3.cita.deploy(bytecode, options)`
+
+  You can deploy Contract by this method
+
+  ```javascript
+  const tx = {
+    privateKey: '',
+    from: '',
+    nonce: '',
+    quota: '',
+    value: '',
+    chainId: 1,
+    version: 0,
+  }
+
+  web3.cita.deploy(bytecode, tx).then(console.log)
+  ```
+
 The majority of web3 keep update with official [web3](https://github.com/ethereum/web3.js/) and several methods below has been changed for CITA:
 
 - web3.cita.getMetaData(blockNumber): Promise<Metadata>
+
+- web3.cita.getAbi(addr, number): Promise<Abi>
 
 - web3.cita.sign(transaction): SignedTransaction
 
@@ -58,6 +82,8 @@ const web3 = NervosWeb3.default(chain)
 web3.cita.getMetaData().then(res => {
   console.log(res)
 })
+
+web3.cita.getAbi('ContractAddr', 'blockNumber').then(console.log)
 
 /**
  * @method cita

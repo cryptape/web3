@@ -14,10 +14,6 @@ const tx = {
   version: 0
 };
 
-test('Get MetaData', async () => {
-  const metadata = await web3.cita.getMetaData().then(res => res.result);
-  expect(metadata.chainId).not.toBeUndefined();
-});
 
 test('Get Block Number', async () => {
   const number = await web3.eth.getBlockNumber().then(res => res.result);
@@ -44,11 +40,9 @@ test('Get Block By Hash', async () => {
   expect(block.hash).toBeTruthy();
 });
 
-test('Send Transaction', async (done) => {
-
+test('Send Transaction', async () => {
   const receipt = await web3.eth.sendTransaction(tx).then(res => res.result);
   expect(receipt.hash).toBeTruthy();
-  done();
 });
 
 

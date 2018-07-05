@@ -184,3 +184,7 @@ export const callHandler = {
 export const getMetaDataHandler = (host: string, number: string) => {
   return request(host, rpcParams('getMetaData', [number]));
 };
+
+export const getAbiHandler = (host: string, addr: string, number: string) => {
+  return request(host, rpcParams('getAbi', [addr, number]));
+};

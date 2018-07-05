@@ -1,15 +1,18 @@
 import Web3 from 'web3';
 import { Provider } from 'web3/types';
+import NervosWeb3Plugin from '@nervos/web3-plugin';
+
 import {
   sendTransactionHandler,
   sendSignedTransactionHandler,
   getBlockNumberHandler,
   getBlockHandler,
   getTransactionHandler,
-  getMetaDataHandler,
   getTransactionReceiptHandler,
   getBalanceHandler,
   callHandler
+  // getMetaDataHandler,
+  // getAbiHandler,
 } from './handlers';
 import callContract from './methods/callContract';
 const Contract = require('web3-eth-contract');
@@ -26,6 +29,13 @@ const NervosWeb3 = (
   CustomWeb3: CustomWeb3 = Web3
 ) => {
   const web3 = new CustomWeb3(provider);
+
+  // generate plugins
+  const { Nervos: plugins } = NervosWeb3Plugin({
+    server: provider as string
+  });
+
+  // update Contract
   web3.eth.Contract.prototype._executeMethod = _executeMethod;
 
   /**
@@ -91,11 +101,6 @@ const NervosWeb3 = (
     getBalanceHandler
   ) as typeof web3.eth.getBalance;
 
-  // web3.eth.Contract = new Proxy(
-  //   web3.eth.Contract,
-  //   ContractHandler,
-  // ) as typeof web3.eth.Contract
-
   web3.eth.call = new Proxy(web3.eth.call, callHandler) as typeof web3.eth.call;
 
   /**
@@ -103,11 +108,34 @@ const NervosWeb3 = (
    */
 
   const cita = {
+    ...plugins,
+    storeAbi: async (addr: string, abiBytes: string) => {
+      // get chain id
+      const { chainId } = (await plugins.metadata({
+        blockNumber: 'latest'
+      })) as any;
+
+      // get current height
+      const currentHeight = await web3.eth
+        .getBlockNumber()
+        .then((res: any) => res.result);
+      const bytecode = addr + abiBytes;
+
+      // construct transaction
+      const tx = {
+        to: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+        quota: 999999,
+        version: 0,
+        value: 0,
+        nonce: Math.round(Math.random() * 10),
+        data: bytecode.startsWith('0x') ? bytecode : '0x' + bytecode,
+        validUntilBlock: +currentHeight + 88,
+        chainId
+      };
+      return web3.eth.sendTransaction(tx);
+    },
     createTxObject: Contract.prototype._createTxObject,
     callContract: callContract(web3),
-    getMetaData: (number: string = 'latest') =>
-      getMetaDataHandler(provider as string, number),
-    // sign: (tx: CITASendTransactionArugments) => citaSignTransaction(tx),
     sign,
     parsers,
     contract: async (abi: any[], addr: string) => {
@@ -115,9 +143,9 @@ const NervosWeb3 = (
       return myContract;
     },
     deploy: async (bytecode: string, transaction: any, abi?: string) => {
-      const chainId = await cita
-        .getMetaData()
-        .then((res: any) => res.result.chainId);
+      const { chainId } = (await plugins.metadata({
+        blockNumber: 'latest'
+      })) as any;
 
       const currentHeight = await web3.eth
         .getBlockNumber()
