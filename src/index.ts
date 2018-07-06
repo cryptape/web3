@@ -1,5 +1,6 @@
 import Web3 from 'web3';
 import { Provider } from 'web3/types';
+import NodeManage from './systems/node';
 import NervosWeb3Plugin from '@nervos/web3-plugin';
 import { default as sign } from '@nervos/signer';
 const Contract = require('web3-eth-contract');
@@ -139,7 +140,7 @@ const NervosWeb3 = (
       const myContract = new web3.eth.Contract(abi, addr);
       return myContract;
     },
-    deploy: async (bytecode: string, transaction: any, abi?: string) => {
+    deploy: async (bytecode: string, transaction: any) => {
       const { chainId } = (await plugins.metadata({
         blockNumber: 'latest'
       })) as any;
@@ -184,7 +185,11 @@ const NervosWeb3 = (
     }
   };
 
-  const target = Object.assign(web3, { cita });
+  const system = {
+    node: new NodeManage(provider as string, web3)
+  };
+
+  const target = Object.assign(web3, { cita, system });
   return target;
 };
 

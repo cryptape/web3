@@ -4,7 +4,7 @@ import { default as sign } from '@nervos/signer';
 export interface RPCParams {
   jsonrpc: string;
   method: string;
-  params: string[];
+  params: (string | object)[];
   id: number;
 }
 
@@ -17,7 +17,7 @@ export const randInt = () => Math.floor(Math.random() * 1000);
 
 export const rpcParams = (
   method: string,
-  params: string[] = []
+  params: (string | object)[] = []
 ): RPCParams => ({
   jsonrpc: '2.0',
   method,
@@ -27,9 +27,12 @@ export const rpcParams = (
 
 export const handleRes = (res: AxiosResponse) => res.data;
 export const request = (
-  host: string,
+  target: { host: string } | string,
   params: RPCParams
-): AxiosPromise<RPCResponse> => axios.post(host, params).then(handleRes);
+): AxiosPromise<RPCResponse> => {
+  const host = typeof target === 'string' ? target : target.host;
+  return axios.post(host, params).then(handleRes);
+};
 
 /**
  * @method sendCitaTransaction

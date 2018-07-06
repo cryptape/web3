@@ -16,7 +16,8 @@ const transaction = {
   data: bytecode,
   chainId: 1,
   version: 0,
-  validUntilBlock: 999999
+  validUntilBlock: 999999,
+  value: '0x0'
 }
 
 const deploy = async () => {
