@@ -11,6 +11,6 @@ git:
   submodules: false
 script:
   - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
-  - git submodulei update --init --recursive
+  - git submodule update --init --recursive
   - npm run build
   - npm test
