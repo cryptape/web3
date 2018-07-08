@@ -111,23 +111,15 @@
     to-fast-properties "^2.0.0"
 
 "@nervos/signer@^1.0.12":
-  version "1.0.12"
-  resolved "https://registry.npmjs.org/@nervos/signer/-/signer-1.0.12.tgz#360b93e61bc13e602a06a4a69e62c38c88a8dd7b"
+  version "1.0.13"
+  resolved "https://registry.npmjs.org/@nervos/signer/-/signer-1.0.13.tgz#55c7932e8c68df3e98631864d9f61c8b3abc0f3c"
   dependencies:
     "@nervos/web3-plugin" "^0.17.5"
     ec "^0.0.1"
     elliptic "^6.4.0"
     web3 "^1.0.0-beta.34"
 
-"@nervos/web3-plugin@^0.17.5":
-  version "0.17.7"
-  resolved "https://registry.npmjs.org/@nervos/web3-plugin/-/web3-plugin-0.17.7.tgz#0d3b3492b5f08b543d336131a158687967837345"
-  dependencies:
-    "@types/google-protobuf" "^3.2.7"
-    axios "^0.18.0"
-    google-protobuf "^3.5.0"
-
-"@nervos/web3-plugin@^0.17.7":
+"@nervos/web3-plugin@^0.17.5", "@nervos/web3-plugin@^0.17.7":
   version "0.17.8"
   resolved "https://registry.npmjs.org/@nervos/web3-plugin/-/web3-plugin-0.17.8.tgz#32ec2209bd615dbc53100aa746afee5e5835152e"
   dependencies:
