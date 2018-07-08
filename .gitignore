@@ -1,5 +1,6 @@
 node_modules
 *.log
-debug
 *.html
 deploy.js
+debug
+debug.*

@@ -45,12 +45,41 @@ export const sendTransactionHandler = {
       if (typeof tx.validUntilBlock === 'undefined') {
         tx.validUntilBlock = +(await thisArg.getBlockNumber()).result + 88;
       }
-      // const unverifiedTransactionData = citaSignTransaction(tx);
       const unverifiedTransactionData = sign(tx);
-      return request(
-        thisArg.currentProvider.host,
-        rpcParams('sendRawTransaction', [unverifiedTransactionData])
-      );
+      const payload = rpcParams('sendRawTransaction', [
+        unverifiedTransactionData
+      ]);
+
+      // use native sendAsync
+      if (thisArg.currrentProvider.sendAsync) {
+        return new Promise((resolve, reject) => {
+          thisArg.currentProvider.sendAsync(
+            payload,
+            (err: Error, result: object) => {
+              if (err) {
+                return reject(err);
+              }
+              return resolve(result);
+            }
+          );
+        });
+      }
+      // use native send
+      if (thisArg.currrentProvider.send) {
+        return new Promise((resolve, reject) => {
+          thisArg.currentProvider.send(
+            payload,
+            (err: Error, result: object) => {
+              if (err) {
+                return reject(err);
+              }
+              return resolve(result);
+            }
+          );
+        });
+      }
+      // use custom request
+      return request(thisArg.currentProvider.host, payload);
     }
     return target(...argumentsList);
   }
