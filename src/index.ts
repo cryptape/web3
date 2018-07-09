@@ -30,7 +30,8 @@ const NervosWeb3 = (
 
   // generate plugins
   const { Nervos: plugins } = NervosWeb3Plugin({
-    server: provider as string
+    // server: provider as string
+    server: typeof provider === 'string' ? provider : (provider as any).host
   });
 
   // update Contract
