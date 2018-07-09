@@ -1,6 +1,6 @@
 {
   "name": "@nervos/web3",
-  "version": "0.17.22",
+  "version": "0.17.23",
   "main": "lib/index.js",
   "repository": "https://github.com/cryptape/web3",
   "author": "Keith <keithwhisper@gmail.com>",
