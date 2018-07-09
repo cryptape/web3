@@ -49,33 +49,24 @@ export const sendTransactionHandler = {
       const payload = rpcParams('sendRawTransaction', [
         unverifiedTransactionData
       ]);
+      const handler = (resolve: Function, reject: Function) => (
+        err: Error,
+        result: object
+      ) => {
+        if (err) return reject(err);
+        return resolve(result);
+      };
 
       // use native sendAsync
-      if (thisArg.currrentProvider.sendAsync) {
+      if (thisArg.currentProvider.sendAsync) {
         return new Promise((resolve, reject) => {
-          thisArg.currentProvider.sendAsync(
-            payload,
-            (err: Error, result: object) => {
-              if (err) {
-                return reject(err);
-              }
-              return resolve(result);
-            }
-          );
+          thisArg.currentProvider.sendAsync(payload, handler(resolve, reject));
         });
       }
       // use native send
-      if (thisArg.currrentProvider.send) {
+      if (thisArg.currentProvider.send) {
         return new Promise((resolve, reject) => {
-          thisArg.currentProvider.send(
-            payload,
-            (err: Error, result: object) => {
-              if (err) {
-                return reject(err);
-              }
-              return resolve(result);
-            }
-          );
+          thisArg.currentProvider.send(payload, handler(resolve, reject));
         });
       }
       // use custom request
