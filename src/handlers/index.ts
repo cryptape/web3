@@ -46,9 +46,12 @@ export const sendTransactionHandler = {
         tx.validUntilBlock = +(await thisArg.getBlockNumber()).result + 88;
       }
       const unverifiedTransactionData = sign(tx);
-      const payload = rpcParams('sendRawTransaction', [
-        unverifiedTransactionData
-      ]);
+      // without private key, tx will be sent to wallet
+      const method =
+        !tx.privateKey && !thisArg.eth.accounts.wallet.length
+          ? 'sendTransaction'
+          : 'sendRawTransaction';
+      const payload = rpcParams(method, [unverifiedTransactionData]);
       const handler = (resolve: Function, reject: Function) => (
         err: Error,
         result: object
