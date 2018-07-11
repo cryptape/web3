@@ -48,7 +48,7 @@ export const sendTransactionHandler = {
       const unverifiedTransactionData = sign(tx);
       // without private key, tx will be sent to wallet
       const method =
-        !tx.privateKey && !thisArg.eth.accounts.wallet.length
+        !tx.privateKey && !thisArg.accounts.wallet.length
           ? 'sendTransaction'
           : 'sendRawTransaction';
       const payload = rpcParams(method, [unverifiedTransactionData]);
