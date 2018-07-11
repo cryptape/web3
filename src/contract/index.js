@@ -161,13 +161,15 @@ export default function _executeMethod() {
           },
         }
 
+        var call = args.options.quota ? 'sendTransaction' : 'eth_sendTransaction'
+        var signer = args.options.quota ? sign : formatters.inputDefaultBlockNumberFormatter
+
+
         var sendTransaction = new Method({
           name: 'sendTransaction',
-          call: 'sendTransaction',
+          call,
           params: 1,
-          // inputFormatter: [formatters.inputTransactionFormatter],
-          // NOTICE: replace default formatter
-          inputFormatter: [sign],
+          inputFormatter: [signer],
           requestManager: _this._parent._requestManager,
           accounts: _this.constructor._ethAccounts || _this._ethAccounts, // is eth.accounts (necessary for wallet signing)
           defaultAccount: _this._parent.defaultAccount,
