@@ -31,6 +31,7 @@
     "./node_modules/types-bn/index.d.ts"
   ],
   "exclude": [
-    "src/debug.ts"
+    "src/debug.ts",
+    "src/methods/citaSignTransaction.ts"
   ]
 }

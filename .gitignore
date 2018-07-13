@@ -4,3 +4,4 @@ node_modules
 deploy.js
 debug
 debug.*
+src/methods/citaSignTransaction.ts

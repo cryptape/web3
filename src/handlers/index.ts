@@ -1,5 +1,6 @@
 import axios, { AxiosResponse, AxiosPromise } from 'axios';
 import { default as sign } from '@nervos/signer';
+// import sign from '../methods/citaSignTransaction'
 
 export interface RPCParams {
   jsonrpc: string;

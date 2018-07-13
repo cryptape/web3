@@ -4,6 +4,7 @@ import NodeManage from './systems/node';
 import NervosWeb3Plugin from '@nervos/web3-plugin';
 import { default as sign } from '@nervos/signer';
 const Contract = require('web3-eth-contract');
+import nervos from './nervos';
 
 import {
   sendTransactionHandler,
@@ -190,7 +191,7 @@ const NervosWeb3 = (
     node: new NodeManage(provider as string, web3)
   };
 
-  const target = Object.assign(web3, { cita, system });
+  const target = Object.assign(nervos(web3), { cita, system });
   return target;
 };
 
