@@ -36,7 +36,7 @@ const deploy = async () => {
   console.log(chalk.blue.bold('Received Result'));
   divider();
   console.log(chalk.blue(JSON.stringify(res, null, 2)));
-  const contract = new web3.eth.Contract(abi, res.result.contractAddress);
+  const contract = new web3.appchain.Contract(abi, res.result.contractAddress);
   return contract;
 };
 
