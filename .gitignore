@@ -5,3 +5,5 @@ deploy.js
 debug
 debug.*
 src/methods/citaSignTransaction.ts
+
+*.brk

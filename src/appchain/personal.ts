@@ -30,18 +30,18 @@ export const lockAccount = {
   inputFormatter: [formatters.inputAddressFormatter]
 };
 
-export const sendTransaction = {
-  name: 'sendTransaction',
-  call: 'personal_sendTransaction',
-  params: 2,
-  inputFormatter: [formatters.inputTransactionFormatter, null]
-};
-export const signTransaction = {
-  name: 'signTransaction',
-  call: 'personal_signTransaction',
-  params: 2,
-  inputFormatter: [formatters.inputTransactionFormatter, null]
-};
+// export const sendTransaction = {
+//   name: 'personal_sendTransaction',
+//   call: 'personal_sendTransaction',
+//   params: 2,
+//   inputFormatter: [formatters.inputTransactionFormatter, null],
+// }
+// export const signTransaction = {
+//   name: 'personal_signTransaction',
+//   call: 'personal_signTransaction',
+//   params: 2,
+//   inputFormatter: [formatters.inputTransactionFormatter, null],
+// }
 export const sign = {
   name: 'sign',
   call: 'personal_sign',

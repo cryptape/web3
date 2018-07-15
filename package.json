@@ -9,7 +9,7 @@
     "protoc": "protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --proto_path=cita-proto --ts_out=./proto-ts --js_out=import_style=commonjs,binary:./proto-ts cita-proto/blockchain.proto",
     "start": "nodemon --config nodemon.json",
     "debug": "node debug/index.js",
-    "build": "tsc",
+    "build": "tsc && yarn run browserify",
     "docs": "typedoc --out ./documents/ ./src/",
     "test": "jest",
     "example": "node examples/deploy.js",

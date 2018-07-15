@@ -12,7 +12,7 @@ export const peerCount = {
 export const getMetaData = {
   name: 'getMetaData',
   call: 'getMetaData',
-  params: 0,
+  params: 1,
   inputFormatter: [formatters.inputDefaultBlockNumberFormatter]
 };
 
@@ -123,10 +123,10 @@ export const getBlockTransactionCount = {
 
 export const getTransaction = {
   name: 'getTransaction',
-  call: 'getTransactionByHash',
+  call: 'getTransaction',
   params: 1,
-  inputFormatter: [null],
-  outputFormatter: formatters.outputTransactionFormatter
+  inputFormatter: [null]
+  // outputFormatter: formatters.outputTransactionFormatter,
 };
 
 export const getTransactionCount = {
@@ -164,7 +164,7 @@ export const signTransaction = {
 
 export const sendTransaction = {
   name: 'sendTransaction',
-  call: 'sendTransaction',
+  call: 'sendRawTransaction',
   params: 1,
   // inputFormatter: [formatters.inputTransactionFormatter],
   inputFormatter: [signer]
@@ -178,7 +178,7 @@ export const newMessageFilter = {
 export const newBlockFilter = {
   name: 'newBlockFilter',
   call: 'newBlockFilter',
-  params: 1
+  params: 0
 };
 export const getFilterChanges = {
   name: 'getFilterChanges',

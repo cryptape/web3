@@ -4,7 +4,7 @@ import * as personal from './personal';
 
 export default (web3: Web3) => {
   web3.extend({
-    property: 'nervos',
+    property: 'appchain',
     methods: [
       rpc.peerCount,
       rpc.getMetaData,
@@ -36,8 +36,8 @@ export default (web3: Web3) => {
       personal.newAccount,
       // personal.unlockAccount,
       // personal.lockAccount,
-      personal.sendTransaction,
-      personal.signTransaction,
+      // personal.sendTransaction,
+      // personal.signTransaction,
       personal.sign,
       personal.ecRecover
     ]
