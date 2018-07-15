@@ -5,12 +5,12 @@ node_js:
 cache:
   directories:
     - node_modules
-install:
-  - npm install
+# install:
+#   - npm install
 git:
   submodules: false
 script:
-  - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
-  - git submodule update --init --recursive
-  - npm run build
+  # - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+  # - git submodule update --init --recursive
+  # - npm run build
   - npm test
