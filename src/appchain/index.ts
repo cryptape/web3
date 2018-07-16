@@ -47,5 +47,47 @@ export default (
     ]
   });
   web3.appchain.Contract = web3.eth.Contract;
+  web3.appchain.deploy = async (bytecode: string, transaction: any) => {
+    // const { chainId } = (await web3.appchain.metadata({
+    //   blockNumber: 'latest',
+    // })) as any
+
+    const currentHeight = await web3.eth
+      .getBlockNumber()
+      .then((res: any) => res.result);
+
+    const tx = {
+      version: 0,
+      value: 0,
+      nonce: Math.round(Math.random() * 10),
+      ...transaction,
+      data: bytecode.startsWith('0x') ? bytecode : '0x' + bytecode,
+      validUntilBlock: +currentHeight + 88
+      // chainId,
+    };
+    const result = await web3.eth
+      .sendTransaction(tx)
+      .then((res: any) => res.result);
+
+    if (!result.hash) {
+      return new Error('No Transaction Hash Received');
+    }
+    let remain = 10;
+    return new Promise((resolve, reject) => {
+      let interval = setInterval(() => {
+        remain = remain - 1;
+        if (remain > 0) {
+          web3.eth.getTransactionReceipt(result.hash).then((res: any) => {
+            if (res.result) {
+              clearInterval(interval);
+              resolve(res);
+            }
+          });
+        } else {
+          reject('No Receipt Received');
+        }
+      }, 1000);
+    });
+  };
   return web3;
 };
