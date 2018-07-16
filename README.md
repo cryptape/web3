@@ -18,14 +18,14 @@ const nervos = Nervos('http://localhost:1337')
 
 `nervos.appchain` allows you to interact with an Nervos Appchain and Nervos Smart Contract.
 
-## RPC Reference
+## ABI Reference
 
 ### peerCount
 
 ```javascript
 /**
  * @method peerCount
- * @desc inquire peer count of appchain
+ * @desc inqure peer count of appchain
  * @param null
  * @return {Promise<string>} Promise returns peer count
  */
