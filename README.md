@@ -1,7 +1,5 @@
 ![Build Status](https://travis-ci.org/cryptape/web3.svg?branch=master)
-[![npm](https://img.shields.io/npm/v/npm.svg)](https://www.npmjs.com/package/@nervos/web3)
-[![npm type definitions](https://img.shields.io/npm/types/chalk.svg)](https://www.npmjs.com/package/@nervos/web3)
-![npm](https://img.shields.io/npm/l/express.svg)
+![npm](https://img.shields.io/npm/v/@nervos/web3.svg)
 
 # Getting Started
 
@@ -30,7 +28,7 @@ const nervos = Nervos('http://localhost:1337')
 
 `nervos.appchain` allows you to interact with an Nervos Appchain and Nervos Smart Contract.
 
-## ABI Reference
+## RPC API Reference
 
 ### peerCount
 
@@ -59,13 +57,25 @@ nervos.appchain.getMetaData()
 ### getAbi
 
 ```javascript
-// TODO:
+/**
+ * @method getAbi
+ * @param {string} - contract address
+ * @param {string} - block number
+ * @return {Promise<string>} Promise returns abi
+ */
+nervos.appchain.getAbi('0xb3f940e3b5F0AA26dB9f86F0824B3581fE18E9D7', 'latest')
 ```
 
 ### getCode
 
 ```javascript
-// TODO
+/**
+ * @method getAbi
+ * @param {string} - contract address
+ * @param {string} - block number
+ * @return {Promise<string>} Promise returns code
+ */
+nervos.appchain.getCode('0xb3f940e3b5F0AA26dB9f86F0824B3581fE18E9D7', 'latest')
 ```
 
 ### getBalance
