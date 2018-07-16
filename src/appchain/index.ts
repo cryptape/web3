@@ -2,7 +2,11 @@ import Web3 from 'web3';
 import * as rpc from './rpc';
 import * as personal from './personal';
 
-export default (web3: Web3) => {
+export default (
+  web3: Web3 & {
+    appchain?: any;
+  }
+) => {
   web3.extend({
     property: 'appchain',
     methods: [
@@ -42,5 +46,6 @@ export default (web3: Web3) => {
       personal.ecRecover
     ]
   });
+  web3.appchain.Contract = web3.eth.Contract;
   return web3;
 };
