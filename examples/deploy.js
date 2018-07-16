@@ -24,7 +24,7 @@ const transaction = {
 }
 
 const deploy = async () => {
-  const current = await web3.cita.getBlockNumber();
+  const current = await web3.appchain.getBlockNumber();
   const tx = {
     ...transaction,
     validUntilBlock: +current + 88
@@ -32,7 +32,7 @@ const deploy = async () => {
   console.log(chalk.green.bold('Sending Trasnaction'));
   divider();
   console.log(chalk.green(JSON.stringify(tx, null, 2)));
-  const res = await web3.cita.deploy(tx.data, tx);
+  const res = await web3.appchain.deploy(tx.data, tx);
   console.log(chalk.blue.bold('Received Result'));
   divider();
   console.log(chalk.blue(JSON.stringify(res, null, 2)));
@@ -51,7 +51,7 @@ const callMethod = async contract => {
 const setMethod = async contract => {
   console.log(chalk.green.bold('Call Send Method'));
   divider();
-  const current = await web3.cita.getBlockNumber();
+  const current = await web3.appchain.getBlockNumber();
   const tx = {
     ...transaction,
     validUntilBlock: +current + 88

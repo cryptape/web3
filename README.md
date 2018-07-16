@@ -202,3 +202,91 @@ nervos.appchain.getFitlerLogs('0x1')
 
 nervos.appchain.deleteMessageFilter('0x1')
 ```
+
+### sendTransaction
+
+```javascript
+/**
+ * @method sendTransaction
+ * @desc send transaction to appchain, if transaction including `privateKey`, it will sign the transaction locally, otherwise the transaction will be send to node and signed remote.
+ * @param {object} - transaction object
+ * @return {Promise<object>} Promise returns transaction hash
+ */
+
+nervos.appchain.sendTransaction(transaction)
+```
+
+### sendSignedTransaction
+
+```javascript
+/**
+ * @method sendSignedTransaction
+ * @desc send signed transaction to appchain
+ * @param {string} - signed transaction message
+ * @return {Promise<object>} Promise returns transaction hash
+ */
+
+nervos.appchain.sendSignedTransaction(signedTransaction)
+```
+
+### getTransactionReceipt
+
+```javascript
+/**
+ * @method getTransactionReceipt
+ * @desc inquire transaction receipt
+ * @param {string} - transaction hash
+ * @return {Promise<object>} Promise returns transaction receipt
+ */
+
+nervos.appchain.sendSignedTransaction(signedTransaction)
+```
+
+### getTransaction
+
+```javascript
+/**
+ * @method getTransaction
+ * @desc inquire transaction
+ * @param {string} - transaction hash
+ * @return {Promise<object>} Promise returns transaction
+ */
+
+nervos.appchain.getTransaction(transactionHash)
+```
+
+## Contract Reference
+
+### Deploy Contract
+
+```javascript
+const bytecode =
+  '6060604052341561000f57600080fd5b60d38061001d6000396000f3006060604052600436106049576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806360fe47b114604e5780636d4ce63c14606e575b600080fd5b3415605857600080fd5b606c60048080359060200190919050506094565b005b3415607857600080fd5b607e609e565b6040518082815260200191505060405180910390f35b8060008190555050565b600080549050905600a165627a7a723058202d9a0979adf6bf48461f24200e635bc19cd1786efbcfc0608eb1d76114d405860029'
+const privateKey = '0x...........'
+const transaction = {
+  from: '0xb4061fA8E18654a7d51FEF3866d45bB1DC688717',
+  privateKey,
+  nonce: 999999,
+  quota: 1000000,
+  chainId: 1,
+  version: 0,
+  validUntilBlock: 999999,
+  value: '0x0',
+}
+web3.appchain.deploy(bytecode, tx)
+```
+
+### Invoke Contract
+
+```javascript
+const abi = JSON.parse(
+  '[{"constant":false,"inputs":[{"name":"_value","type":"uint256"}],"name":"set","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"get","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}]',
+)
+const contract = new nervos.appchain.Contract(abi, contractAddress)
+
+// call method
+contract.methods.get().call()
+
+// send method
+contract.methods.set(5).send(transaction)
+```
