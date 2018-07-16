@@ -7,6 +7,18 @@
 
 `@nervos/web3` is a high-order function takes `provider` and `Web3 Class`(optional) as inputs, returns nervos-supported web3 instance.
 
+To use `@nervos/web3', you can add it via npm
+
+```shell
+yarn add @nervos/web3
+```
+
+or to link it in browser directly with
+
+```html
+<script src="node_modules/@nervos/web3/lib/bundle.js" />
+```
+
 # Add `nervos.js`
 
 ```javascript
