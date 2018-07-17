@@ -19,14 +19,18 @@ export const getMetaData = {
 export const getAbi = {
   name: 'getAbi',
   call: 'getAbi',
-  params: 1
+  params: 2,
+  inputFormatter: [
+    formatters.inputAddressFormatter,
+    formatters.inputDefaultBlockNumberFormatter
+  ]
 };
 
 export const getTransactionReceipt = {
   name: 'getTransactionReceipt',
   call: 'getTransactionReceipt',
   params: 1,
-  inputFormatter: [null],
+  // inputFormatter: [formatters.inputAddressFormatter],
   outputFormatter: formatters.outputTransactionReceiptFormatter
 };
 
@@ -203,9 +207,9 @@ export const sign = {
   call: 'sign',
   params: 2,
   inputFormatter: [
-    // formatters.inputSignFormatter,
-    // formatters.inputAddressFormatter,
-    signer
+    formatters.inputSignFormatter,
+    formatters.inputAddressFormatter
+    // signer
   ],
   transformPayload: function(payload: any) {
     payload.params.reverse();

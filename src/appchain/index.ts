@@ -1,6 +1,6 @@
 import Web3 from 'web3';
 import * as rpc from './rpc';
-import * as personal from './personal';
+import * as personal from './neuron';
 
 export default (
   web3: Web3 & {
@@ -46,7 +46,9 @@ export default (
       personal.ecRecover
     ]
   });
+  // add contract
   web3.appchain.Contract = web3.eth.Contract;
+
   web3.appchain.deploy = async (bytecode: string, transaction: any) => {
     // const { chainId } = (await web3.appchain.metadata({
     //   blockNumber: 'latest',
@@ -89,5 +91,9 @@ export default (
       }, 1000);
     });
   };
+  const neuron = {
+    sign: web3.appchain.neuron_sign
+  };
+  web3.appchain.personal = neuron;
   return web3;
 };
