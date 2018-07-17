@@ -9,7 +9,7 @@ const {
 const divider = () => console.log(chalk.green('-'.repeat(10)));
 
 const account = web3.eth.accounts.privateKeyToAccount(privateKey);
-web3.eth.getBalance(account.address).then(console.log);
+web3.appchain.getBalance(account.address).then(console.log);
 
 const transaction = {
   from: '0xb4061fA8E18654a7d51FEF3866d45bB1DC688717',
@@ -36,7 +36,7 @@ const deploy = async () => {
   console.log(chalk.blue.bold('Received Result'));
   divider();
   console.log(chalk.blue(JSON.stringify(res, null, 2)));
-  const contract = new web3.appchain.Contract(abi, res.result.contractAddress);
+  const contract = new web3.appchain.Contract(abi, res.contractAddress);
   return contract;
 };
 
