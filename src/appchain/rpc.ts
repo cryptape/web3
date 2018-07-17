@@ -30,7 +30,7 @@ export const getTransactionReceipt = {
   name: 'getTransactionReceipt',
   call: 'getTransactionReceipt',
   params: 1,
-  inputFormatter: [formatters.inputAddressFormatter],
+  // inputFormatter: [formatters.inputAddressFormatter],
   outputFormatter: formatters.outputTransactionReceiptFormatter
 };
 
@@ -207,9 +207,9 @@ export const sign = {
   call: 'sign',
   params: 2,
   inputFormatter: [
-    // formatters.inputSignFormatter,
-    // formatters.inputAddressFormatter,
-    signer
+    formatters.inputSignFormatter,
+    formatters.inputAddressFormatter
+    // signer
   ],
   transformPayload: function(payload: any) {
     payload.params.reverse();

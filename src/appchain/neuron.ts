@@ -43,14 +43,18 @@ export const lockAccount = {
 //   inputFormatter: [formatters.inputTransactionFormatter, null],
 // }
 export const sign = {
-  name: 'sign',
-  call: 'personal_sign',
+  name: 'neuron_sign',
+  call: 'neuron_sign',
   params: 3,
   inputFormatter: [
     formatters.inputSignFormatter,
     formatters.inputAddressFormatter,
     null
-  ]
+  ],
+  transformPayload: function(payload: any) {
+    payload.params.reverse();
+    return payload;
+  }
 };
 
 export const ecRecover = {
