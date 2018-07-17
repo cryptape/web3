@@ -25,7 +25,11 @@ const nervos = Nervos('http://localhost:1337')
 ```javascript
 /**
  * @method peerCount
+<<<<<<< HEAD
  * @desc inqure peer count of appchain
+=======
+ * @desc inquire peer count of appchain
+>>>>>>> e45d9e4... update: add rpc docs
  * @param null
  * @return {Promise<string>} Promise returns peer count
  */
