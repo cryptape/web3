@@ -54,9 +54,11 @@ export default (
     //   blockNumber: 'latest',
     // })) as any
 
-    const currentHeight = await web3.eth
+    const currentHeight = await web3.appchain
       .getBlockNumber()
-      .then((res: any) => res.result);
+      .catch((err: any) => {
+        console.error(err);
+      });
 
     const tx = {
       version: 0,
@@ -67,9 +69,9 @@ export default (
       validUntilBlock: +currentHeight + 88
       // chainId,
     };
-    const result = await web3.eth
-      .sendTransaction(tx)
-      .then((res: any) => res.result);
+    const result = await web3.appchain.sendTransaction(tx).catch((err: any) => {
+      console.error(err);
+    });
 
     if (!result.hash) {
       return new Error('No Transaction Hash Received');
@@ -79,8 +81,8 @@ export default (
       let interval = setInterval(() => {
         remain = remain - 1;
         if (remain > 0) {
-          web3.eth.getTransactionReceipt(result.hash).then((res: any) => {
-            if (res.result) {
+          web3.appchain.getTransactionReceipt(result.hash).then((res: any) => {
+            if (res) {
               clearInterval(interval);
               resolve(res);
             }
@@ -89,6 +91,8 @@ export default (
           reject('No Receipt Received');
         }
       }, 1000);
+    }).catch((err: any) => {
+      console.error(err);
     });
   };
   const neuron = {

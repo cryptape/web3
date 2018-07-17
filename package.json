@@ -14,7 +14,7 @@
     "test": "jest",
     "example": "node examples/deploy.js",
     "browserify": "browserify ./lib/browser.js -o ./lib/bundle.js && minify ./lib/bundle.js -d ./lib/",
-    "precommit": "lint-staged && test"
+    "precommit": "lint-staged"
   },
   "lint-staged": {
     "*.ts": [
