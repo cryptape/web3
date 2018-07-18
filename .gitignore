@@ -1,7 +1,7 @@
 node_modules
 *.log
 *.html
-deploy.js
+# deploy.js
 debug
 debug.*
 src/methods/citaSignTransaction.ts
