@@ -166,9 +166,16 @@ export const signTransaction = {
   inputFormatter: [signer]
 };
 
+const sendTransactionCall = (args: any) => {
+  if (args && args.length && args[0] && args[0].privateKey) {
+    return 'sendRawTransaction';
+  }
+  return 'sendTransaction';
+};
 export const sendTransaction = {
   name: 'sendTransaction',
-  call: 'sendRawTransaction',
+  // call: 'sendRawTransaction',
+  call: sendTransactionCall,
   params: 1,
   // inputFormatter: [formatters.inputTransactionFormatter],
   inputFormatter: [signer]
