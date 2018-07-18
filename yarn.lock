@@ -120,7 +120,7 @@
     elliptic "^6.4.0"
     web3 "^1.0.0-beta.34"
 
-"@nervos/web3-plugin@^0.17.5", "@nervos/web3-plugin@^0.17.7":
+"@nervos/web3-plugin@^0.17.5":
   version "0.17.8"
   resolved "https://registry.npmjs.org/@nervos/web3-plugin/-/web3-plugin-0.17.8.tgz#32ec2209bd615dbc53100aa746afee5e5835152e"
   dependencies:

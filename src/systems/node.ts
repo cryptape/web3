@@ -1,5 +1,3 @@
-import { request, rpcParams } from '../handlers';
-
 const transaction = {
   from: '',
   nonce: 999999,
@@ -10,10 +8,9 @@ const transaction = {
   value: '0x0'
 };
 class NodeMange {
-  private host: any;
   // private encodeParameter: any
   private web3: any;
-  private address = '0x00000000000000000000000000000000013241a2';
+  private address = '0xffffffffffffffffffffffffffffffffff020001';
   private signatures = {
     approveNode: 'dd4c97a0',
     deleteNode: '2d4ede93',
@@ -22,26 +19,24 @@ class NodeMange {
     newNode: 'ddad2ffe',
     status: '645b8b1b'
   };
-  constructor(host: string | { host: string }, web3: any) {
-    this.host = host;
+  constructor(web3: any, address: string = '') {
     // this.encodeParameter = encodeParameter
     this.web3 = web3;
+    this.address = address;
   }
+
+  public setAddress = (addr: string) => {
+    this.address = addr;
+  };
 
   /**
    * @method listNode
    */
   public listNode = () => {
-    return request(
-      this.host,
-      rpcParams('call', [
-        {
-          to: this.address,
-          data: '0x' + this.signatures.listNode
-        },
-        'latest'
-      ])
-    );
+    return this.web3.appchain.call({
+      to: this.address,
+      data: '0x' + this.signatures.listNode
+    });
   };
 
   /**
@@ -57,7 +52,7 @@ class NodeMange {
     }
     tx.privateKey =
       tx.privateKey || this.web3.eth.accounts.wallet[0].privateKey;
-    return this.web3.eth.sendTransaction(tx);
+    return this.web3.appchain.sendTransaction(tx);
   };
   /**
    * @method approveNode
@@ -72,7 +67,7 @@ class NodeMange {
     }
     tx.privateKey =
       tx.privateKey || this.web3.eth.accounts.wallet[0].privateKey;
-    return this.web3.eth.sendTransaction(tx);
+    return this.web3.appchain.sendTransaction(tx);
   };
   /**
    * @method deleteNode
@@ -87,37 +82,28 @@ class NodeMange {
     }
     tx.privateKey =
       tx.privateKey || this.web3.eth.accounts.wallet[0].privateKey;
-    return this.web3.eth.sendTransaction(tx);
+    return this.web3.appchain.sendTransaction(tx);
   };
   public getStatus = (addr: string) => {
     const cttAddr = this.signatures.getStatus;
-    const params = this.web3.eth.abi.encodeParameter('address', addr).slice(2);
-
-    return request(
-      this.host,
-      rpcParams('call', [
-        {
-          to: this.address,
-          data: '0x' + cttAddr + params
-        },
-        'latest'
-      ])
-    );
+    const encodedParams = this.web3.eth.abi
+      .encodeParameter('address', addr)
+      .slice(2);
+    return this.web3.appchain.call({
+      to: this.address,
+      data: '0x' + cttAddr + encodedParams
+    });
   };
   public status = (addr: string) => {
     const cttAddr = this.signatures.status;
-    const params = this.web3.eth.abi.encodeParameter('address', addr).slice(2);
+    const encodedParams = this.web3.eth.abi
+      .encodeParameter('address', addr)
+      .slice(2);
 
-    return request(
-      this.host,
-      rpcParams('call', [
-        {
-          to: this.address,
-          data: '0x' + cttAddr + params
-        },
-        'latest'
-      ])
-    );
+    return this.web3.appchain.call({
+      to: this.address,
+      data: '0x' + cttAddr + encodedParams
+    });
   };
 }
 export default NodeMange;
