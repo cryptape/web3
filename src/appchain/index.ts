@@ -3,11 +3,12 @@ import * as rpc from './rpc';
 import * as personal from './neuron';
 import listener from './listener';
 
-export default (
-  web3: Web3 & {
-    appchain?: any;
-  }
-) => {
+export interface EnhancedWeb3 extends Web3 {
+  appchain?: any;
+  listeners?: any;
+}
+
+export default (web3: EnhancedWeb3) => {
   web3.extend({
     property: 'appchain',
     methods: [
@@ -49,13 +50,14 @@ export default (
   });
   // add contract
   web3.appchain.Contract = web3.eth.Contract;
+  web3 = listener(web3) as any;
 
   web3.appchain.deploy = async (bytecode: string, transaction: any) => {
-    const currentHeight = transaction.validUntilBlock
-      ? +transaction.validUntilBlock - 88
-      : await web3.appchain.getBlockNumber().catch((err: any) => {
-          console.error(err);
-        });
+    const currentHeight = await web3.appchain
+      .getBlockNumber()
+      .catch((err: any) => {
+        console.error(err);
+      });
 
     const tx = {
       version: 0,
@@ -65,31 +67,15 @@ export default (
       data: bytecode.startsWith('0x') ? bytecode : '0x' + bytecode,
       validUntilBlock: +currentHeight + 88
     };
+
     const result = await web3.appchain.sendTransaction(tx).catch((err: any) => {
-      console.error(err);
+      throw new Error(err);
     });
 
     if (!result.hash) {
       return new Error('No Transaction Hash Received');
     }
-    let remain = 10;
-    return new Promise((resolve, reject) => {
-      let interval = setInterval(() => {
-        remain = remain - 1;
-        if (remain > 0) {
-          web3.appchain.getTransactionReceipt(result.hash).then((res: any) => {
-            if (res) {
-              clearInterval(interval);
-              resolve(res);
-            }
-          });
-        } else {
-          reject('No Receipt Received');
-        }
-      }, 1000);
-    }).catch((err: any) => {
-      console.error(err);
-    });
+    return web3.listeners.listenToTransactionReceipt(result.hash);
   };
   // web3.appchain.storeAbi = async (address:string, abi:string) => {
   //   if (!address) {
@@ -108,5 +94,5 @@ export default (
   };
   web3.appchain.personal = neuron;
 
-  return listener(web3);
+  return web3;
 };

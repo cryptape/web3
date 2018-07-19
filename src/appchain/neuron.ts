@@ -1,5 +1,3 @@
-// import signer from '@nervos/signer'
-// var _ = require('underscore')
 var formatters = require('web3-core-helpers').formatters;
 var utils = require('web3-utils');
 

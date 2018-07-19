@@ -1,4 +1,4 @@
-import Web3 from 'web3';
+import { EnhancedWeb3 } from './index';
 
 const actions = [
   'getTransactionReceipt',
@@ -7,7 +7,7 @@ const actions = [
   'getFilterChanges'
 ];
 
-const listener = (web3: Web3 & { appchain?: any }) => {
+const listener = (web3: EnhancedWeb3) => {
   let listeners: { [index: string]: Function } = {};
   actions.forEach(action => {
     listeners[`listenTo${action.slice(3)}`] = (
