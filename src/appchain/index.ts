@@ -1,6 +1,7 @@
 import Web3 from 'web3';
 import * as rpc from './rpc';
 import * as personal from './neuron';
+import listener from './listener';
 
 export default (
   web3: Web3 & {
@@ -50,15 +51,11 @@ export default (
   web3.appchain.Contract = web3.eth.Contract;
 
   web3.appchain.deploy = async (bytecode: string, transaction: any) => {
-    // const { chainId } = (await web3.appchain.metadata({
-    //   blockNumber: 'latest',
-    // })) as any
-
-    const currentHeight = await web3.appchain
-      .getBlockNumber()
-      .catch((err: any) => {
-        console.error(err);
-      });
+    const currentHeight = transaction.validUntilBlock
+      ? +transaction.validUntilBlock - 88
+      : await web3.appchain.getBlockNumber().catch((err: any) => {
+          console.error(err);
+        });
 
     const tx = {
       version: 0,
@@ -67,7 +64,6 @@ export default (
       ...transaction,
       data: bytecode.startsWith('0x') ? bytecode : '0x' + bytecode,
       validUntilBlock: +currentHeight + 88
-      // chainId,
     };
     const result = await web3.appchain.sendTransaction(tx).catch((err: any) => {
       console.error(err);
@@ -95,9 +91,22 @@ export default (
       console.error(err);
     });
   };
+  // web3.appchain.storeAbi = async (address:string, abi:string) => {
+  //   if (!address) {
+  //     throw new Error('Store ABI needs contract address')
+  //   }
+  //   if (typeof abi !== 'string') {
+  //     throw new Error('ABI should be string')
+  //   }
+
+  //   let hexedABI = web3.utils.fromUtf8(abi)
+  //   hexedABI = hexedABI.startsWith('0x') ? hexedABI.slice(2) : hexedABI
+
+  // }
   const neuron = {
     sign: web3.appchain.neuron_sign
   };
   web3.appchain.personal = neuron;
-  return web3;
+
+  return listener(web3);
 };
