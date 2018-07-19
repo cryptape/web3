@@ -7,3 +7,4 @@ debug.*
 src/methods/citaSignTransaction.ts
 
 *.brk
+.vscode/last.sql
