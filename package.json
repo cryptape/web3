@@ -1,6 +1,6 @@
 {
   "name": "@nervos/web3",
-  "version": "0.17.32",
+  "version": "0.17.34",
   "main": "lib/index.js",
   "repository": "https://github.com/cryptape/web3",
   "author": "Keith <keithwhisper@gmail.com>",
@@ -9,7 +9,7 @@
     "protoc": "protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --proto_path=cita-proto --ts_out=./proto-ts --js_out=import_style=commonjs,binary:./proto-ts cita-proto/blockchain.proto",
     "start": "nodemon --config nodemon.json",
     "debug": "node debug/index.js",
-    "build": "tsc && yarn run browserify",
+    "build": "tsc && browserify",
     "docs": "typedoc --out ./documents/ ./src/",
     "test": "jest",
     "example": "node examples/deploy.js",
@@ -50,8 +50,7 @@
     "utf8": "^3.0.0"
   },
   "dependencies": {
-    "@nervos/signer": "^1.0.17",
-    "@nervos/web3-plugin": "^0.17.7",
+    "@nervos/signer": "^1.0.19",
     "axios": "^0.18.0",
     "crypto-js": "^3.1.9-1",
     "elliptic": "^6.4.0",

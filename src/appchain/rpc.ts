@@ -19,14 +19,18 @@ export const getMetaData = {
 export const getAbi = {
   name: 'getAbi',
   call: 'getAbi',
-  params: 1
+  params: 2,
+  inputFormatter: [
+    formatters.inputAddressFormatter,
+    formatters.inputDefaultBlockNumberFormatter
+  ]
 };
 
 export const getTransactionReceipt = {
   name: 'getTransactionReceipt',
   call: 'getTransactionReceipt',
   params: 1,
-  inputFormatter: [null],
+  // inputFormatter: [formatters.inputAddressFormatter],
   outputFormatter: formatters.outputTransactionReceiptFormatter
 };
 
@@ -162,9 +166,16 @@ export const signTransaction = {
   inputFormatter: [signer]
 };
 
+const sendTransactionCall = (args: any) => {
+  if (args && args.length && args[0] && args[0].privateKey) {
+    return 'sendRawTransaction';
+  }
+  return 'sendTransaction';
+};
 export const sendTransaction = {
   name: 'sendTransaction',
-  call: 'sendRawTransaction',
+  // call: 'sendRawTransaction',
+  call: sendTransactionCall,
   params: 1,
   // inputFormatter: [formatters.inputTransactionFormatter],
   inputFormatter: [signer]
@@ -203,9 +214,9 @@ export const sign = {
   call: 'sign',
   params: 2,
   inputFormatter: [
-    // formatters.inputSignFormatter,
-    // formatters.inputAddressFormatter,
-    signer
+    formatters.inputSignFormatter,
+    formatters.inputAddressFormatter
+    // signer
   ],
   transformPayload: function(payload: any) {
     payload.params.reverse();

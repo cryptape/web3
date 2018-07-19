@@ -35,7 +35,7 @@ const nervos = Nervos('http://localhost:1337')
 ```javascript
 /**
  * @method peerCount
- * @desc inqure peer count of appchain
+ * @desc inquire peer count of appchain
  * @param null
  * @return {Promise<string>} Promise returns peer count
  */
@@ -223,6 +223,35 @@ nervos.appchain.getFitlerLogs('0x1')
  */
 
 nervos.appchain.deleteMessageFilter('0x1')
+```
+
+### sign
+
+```javascript
+/**
+ * @method sign
+ * @desc sign message in wallet
+ * @param {string} - message to sign
+ * @param {string} - address of specified account
+ * @return {Promise<string>} Promise returns signed message
+ */
+
+nervos.appchain.sign(message, address)
+```
+
+### personal.sign
+
+```javascript
+/**
+ * @method personal.sign
+ * @desc sign message in wallet
+ * @param {string} - message to sign
+ * @param {string} - address of specified account
+ * @param {string} - password of specified account
+ * @return {Promise<string>} Promise returns signed message
+ */
+
+nervos.appchain.personal.sign(message, address, password)
 ```
 
 ### sendTransaction

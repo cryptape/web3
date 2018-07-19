@@ -110,9 +110,9 @@
     lodash "^4.17.5"
     to-fast-properties "^2.0.0"
 
-"@nervos/signer@^1.0.17":
-  version "1.0.17"
-  resolved "https://registry.npmjs.org/@nervos/signer/-/signer-1.0.17.tgz#e91d081f80a7c6fc8fe0960fdd958f7badf18675"
+"@nervos/signer@^1.0.19":
+  version "1.0.19"
+  resolved "https://registry.npmjs.org/@nervos/signer/-/signer-1.0.19.tgz#07de8877dc8919783c51e07732dbb8d7c02280f9"
   dependencies:
     "@nervos/web3-plugin" "^0.17.5"
     crypto-js "^3.1.9-1"
@@ -120,7 +120,7 @@
     elliptic "^6.4.0"
     web3 "^1.0.0-beta.34"
 
-"@nervos/web3-plugin@^0.17.5", "@nervos/web3-plugin@^0.17.7":
+"@nervos/web3-plugin@^0.17.5":
   version "0.17.8"
   resolved "https://registry.npmjs.org/@nervos/web3-plugin/-/web3-plugin-0.17.8.tgz#32ec2209bd615dbc53100aa746afee5e5835152e"
   dependencies:
