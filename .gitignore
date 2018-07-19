@@ -8,3 +8,7 @@ src/methods/citaSignTransaction.ts
 
 *.brk
 .vscode/last.sql
+
+
+# working
+subscription
