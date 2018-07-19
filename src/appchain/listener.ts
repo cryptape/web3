@@ -1,9 +1,17 @@
 import Web3 from 'web3';
 
+const actions = [
+  'getTransactionReceipt',
+  'getTransaction',
+  'getTransactionProof',
+  'getFilterChanges'
+];
+
 const listener = (web3: Web3 & { appchain?: any }) => {
-  const listeners = {
-    listenToTransactionReceipt: (
-      transactionHash: string,
+  let listeners: { [index: string]: Function } = {};
+  actions.forEach(action => {
+    listeners[`listenTo${action.slice(3)}`] = (
+      params: any,
       times: number = 10
     ) => {
       return new Promise((resolve, reject) => {
@@ -15,22 +23,19 @@ const listener = (web3: Web3 & { appchain?: any }) => {
         listener = setInterval(() => {
           if (!remains) {
             stopWatching();
-            reject('No Receipt Receved');
+            reject('No Result Receved');
           }
-          web3.appchain
-            .getTransactionReceipt(transactionHash)
-            .then((res: any) => {
-              remains--;
-              if (res) {
-                clearInterval(listener);
-                resolve(res);
-              }
-            });
+          web3.appchain[action](params).then((res: any) => {
+            remains--;
+            if (res) {
+              clearInterval(listener);
+              resolve(res);
+            }
+          });
         }, 1000);
       });
-    }
-  };
-  // web3.appchain.listeners = listeners
+    };
+  });
   return { ...web3, listeners };
 };
 
