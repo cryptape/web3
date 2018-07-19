@@ -57,7 +57,7 @@ const setMethod = async contract => {
     validUntilBlock: +current + 88
   };
   const res = await contract.methods.set(5).send(tx);
-  console.log(chalk.blue.bold('Received Receipt'));
+  console.log(chalk.blue.bold('Received Send Result'));
   console.log(chalk.blue(JSON.stringify(res, null, 2)));
   setTimeout(() => {
     callMethod(contract);
