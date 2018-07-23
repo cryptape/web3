@@ -290,7 +290,7 @@ nervos.appchain.sendSignedTransaction(signedTransaction)
  * @return {Promise<object>} Promise returns transaction receipt
  */
 
-nervos.appchain.sendSignedTransaction(signedTransaction)
+nervos.appchain.getTransactionReceipt(transactionHash)
 ```
 
 ### getTransaction
