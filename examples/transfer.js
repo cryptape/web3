@@ -49,5 +49,4 @@ const checkBalance = async to => {
 };
 
 const to = '0xb4061fa8e18654a7d51fef3866d45bb1dc688710';
-// const to = myAccount.address;
 transfer(to, '0x10');

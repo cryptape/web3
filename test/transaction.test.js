@@ -98,3 +98,14 @@ test.skip('sign', () => {
 test.skip('call', async () => {
   //
 })
+
+test('listen to transaction receipt', async () => {
+  const currentHeight = await nervos.appchain.getBlockNumber()
+  const result = await nervos.appchain.sendTransaction({
+    ...tx,
+    validUntilBlock: +currentHeight + 88,
+  });
+  const receipt = await nervos.listeners.listenToTransactionReceipt(result.hash);
+  console.log(receipt);
+  expect(receipt.transactionHash).toBe(result.hash);
+});

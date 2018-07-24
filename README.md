@@ -341,3 +341,7 @@ contract.methods.get().call()
 // send method
 contract.methods.set(5).send(transaction)
 ```
+
+//TODO:
+// web3.eth.accounts.wallet[0]
+// signer, and unsigner
