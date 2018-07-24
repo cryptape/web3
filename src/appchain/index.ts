@@ -1,13 +1,13 @@
-import Web3 from 'web3';
-import signer, { unsigner } from '@nervos/signer';
-import * as rpc from './rpc';
-import * as personal from './neuron';
-import listener from './listener';
-import addPrivateKeyFrom from '../utils/addPrivateKey';
+import Web3 from 'web3'
+import signer, { unsigner } from '@nervos/signer'
+import * as rpc from './rpc'
+import * as personal from './neuron'
+import listener from './listener'
+import addPrivateKeyFrom from '../utils/addPrivateKey'
 
 export interface EnhancedWeb3 extends Web3 {
-  appchain?: any;
-  listeners?: any;
+  appchain?: any
+  listeners?: any
 }
 
 export default (web3: EnhancedWeb3) => {
@@ -49,19 +49,19 @@ export default (web3: EnhancedWeb3) => {
       personal.sign,
       personal.ecRecover
     ]
-  });
+  })
   // add contract
-  web3.appchain.Contract = web3.eth.Contract;
-  web3 = listener(web3) as any;
-  web3.appchain.signer = signer;
-  web3.appchain.unsigner = unsigner;
+  web3.appchain.Contract = web3.eth.Contract
+  web3 = listener(web3) as any
+  web3.appchain.signer = signer
+  web3.appchain.unsigner = unsigner
 
   web3.appchain.deploy = async (bytecode: string, transaction: any) => {
     const currentHeight = await web3.appchain
       .getBlockNumber()
       .catch((err: any) => {
-        console.error(err);
-      });
+        console.error(err)
+      })
 
     const _tx = {
       version: 0,
@@ -70,59 +70,69 @@ export default (web3: EnhancedWeb3) => {
       ...transaction,
       data: bytecode.startsWith('0x') ? bytecode : '0x' + bytecode,
       validUntilBlock: +currentHeight + 88
-    };
+    }
 
-    const tx = addPrivateKeyFrom(web3.eth.accounts.wallet)(_tx);
+    const tx = addPrivateKeyFrom(web3.eth.accounts.wallet)(_tx)
 
     const result = await web3.appchain.sendTransaction(tx).catch((err: any) => {
-      throw new Error(err);
-    });
+      throw new Error(err)
+    })
 
     if (!result.hash) {
-      return new Error('No Transaction Hash Received');
+      return new Error('No Transaction Hash Received')
     }
-    return web3.listeners.listenToTransactionReceipt(result.hash);
-  };
-  web3.appchain.storeAbi = async (address: string, abi: string) => {
-    if (!address) {
-      throw new Error('Store ABI needs contract address');
+    return web3.listeners.listenToTransactionReceipt(result.hash)
+  }
+  web3.appchain._abiAddress = 'ffffffffffffffffffffffffffffffffff010001'
+  Object.defineProperty(web3.appchain, 'abiAddress', {
+    get: () => {
+      return web3.appchain._abiAddress
+    },
+    set: (newAddr: string) => {
+      if (web3.utils.isAddress(newAddr)) {
+        web3.appchain._abiAddress = newAddr.replace(/^0x/, '')
+      } else {
+        throw new Error('Not valid address')
+      }
     }
-    if (typeof abi !== 'string') {
-      throw new Error('ABI should be string');
+  })
+  web3.appchain.storeAbi = async (
+    contractAddress: string,
+    abi: string,
+    options: any
+  ) => {
+    if (!contractAddress) {
+      throw new Error('Store ABI needs contract address')
     }
-    const currentHeight = await web3.appchain
-      .getBlockNumber()
-      .catch((err: any) => {
-        console.error(err);
-      });
-
-    const privateKey =
-      '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
-    const hexedABI =
-      '73552bc4e960a1d53013b40074569ea05b950b4d4ed3885e000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000001275b7b22636f6e7374616e74223a66616c73652c22696e70757473223a5b7b226e616d65223a2278222c2274797065223a2275696e74323536227d5d2c226e616d65223a22736574222c226f757470757473223a5b5d2c2270617961626c65223a66616c73652c2273746174654d75746162696c697479223a226e6f6e70617961626c65222c2274797065223a2266756e6374696f6e227d2c7b22636f6e7374616e74223a747275652c22696e70757473223a5b5d2c226e616d65223a22676574222c226f757470757473223a5b7b226e616d65223a22222c2274797065223a2275696e74323536227d5d2c2270617961626c65223a66616c73652c2273746174654d75746162696c697479223a2276696577222c2274797065223a2266756e6374696f6e227d5d00000000000000000000000000000000000000000000000000';
-    const abiAddr = '0xffffffffffffffffffffffffffffffffff010001';
-    const tx = {
-      privateKey,
+    if (!Array.isArray(abi)) {
+      throw new Error('ABI should be Array type')
+    }
+    const _tx = {
       version: 0,
       value: 0,
-      to: abiAddr,
       nonce: Math.round(Math.random() * 10),
-      data: hexedABI,
-      validUntilBlock: +currentHeight + 88,
-      quota: 89999
-    };
-
-    const txResult = await web3.appchain.sendTransaction(tx);
-    console.log(txResult);
+      ...options,
+      to: web3.appchain.abiAddress
+    }
+    const transaction = addPrivateKeyFrom(web3.eth.accounts.wallet)(_tx)
+    try {
+      const abiBytes = (web3.utils as any)
+        .utf8ToHex(JSON.stringify(abi))
+        .slice(2)
+      transaction.data = contractAddress.replace(/^0x/i, '') + abiBytes
+    } catch (err) {
+      throw new Error(err)
+    }
+    const txResult = await web3.appchain.sendTransaction(transaction)
     const txReceipt = await web3.listeners.listenToTransactionReceipt(
       txResult.hash
-    );
-    console.log(txReceipt);
-  };
+    )
+    return txReceipt
+  }
   const neuron = {
     sign: web3.appchain.neuron_sign
-  };
-  web3.appchain.personal = neuron;
+  }
+  web3.appchain.personal = neuron
 
-  return web3;
-};
+  return web3
+}

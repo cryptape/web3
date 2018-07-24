@@ -1,7 +1,8 @@
 const {
   nervos,
-  from,
+  bytecode,
   privateKey,
+  abi,
   tx
 } = require('./config')
 
@@ -57,12 +58,11 @@ test('sendTransaction, getTransactionReceipt, and getTransaction', async () => {
 })
 
 test('transfer', async () => {
-  expect.assertions(6);
-  jest.setTimeout(30000);
+  expect.assertions(6)
+  jest.setTimeout(30000)
 
   const to = '0xb4061fa8e18654a7d51fef3866d45bb1dc688710'
   const prevBalance = await nervos.appchain.getBalance(to)
-  // console.log(`prev balance of ${to} is ${prevBalance}`)
 
   const currentHeight = await nervos.appchain.getBlockNumber()
   const result = await nervos.appchain.sendTransaction({
@@ -87,7 +87,6 @@ test('transfer', async () => {
   const transactionResult = await nervos.appchain.getTransaction(result.hash)
   expect(transactionResult.hash).toBe(result.hash)
   const currentBalance = await nervos.appchain.getBalance(to)
-  // console.log(`current balance of ${to} is ${currentBalance}`)
   expect(+currentBalance).toBeGreaterThan(+prevBalance)
 })
 
@@ -103,9 +102,29 @@ test('listen to transaction receipt', async () => {
   const currentHeight = await nervos.appchain.getBlockNumber()
   const result = await nervos.appchain.sendTransaction({
     ...tx,
-    validUntilBlock: +currentHeight + 88,
-  });
-  const receipt = await nervos.listeners.listenToTransactionReceipt(result.hash);
-  console.log(receipt);
-  expect(receipt.transactionHash).toBe(result.hash);
-});
+    validUntilBlock: +currentHeight + 88
+  })
+  const receipt = await nervos.listeners.listenToTransactionReceipt(result.hash)
+  expect(receipt.transactionHash).toBe(result.hash)
+})
+
+test('store abi', async () => {
+  nervos.eth.accounts.wallet.add(
+    nervos.eth.accounts.privateKeyToAccount(privateKey)
+  )
+  const currentHeight = await nervos.appchain.getBlockNumber()
+  const contractReuslt = await nervos.appchain.deploy(bytecode, {
+    ...tx,
+    validUntilBlock: +currentHeight + 88
+  })
+  const {
+    contractAddress
+  } = contractReuslt
+  const receipt = await nervos.appchain.storeAbi(contractAddress, abi, {
+    ...tx,
+    validUntilBlock: +currentHeight + 88
+  })
+
+  const returnAbi = await nervos.appchain.getAbi(contractAddress)
+  expect(returnAbi).toBe(nervos.utils.utf8ToHex(JSON.stringify(abi)))
+})

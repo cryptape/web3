@@ -1,9 +1,15 @@
 ![Build Status](https://travis-ci.org/cryptape/web3.svg?branch=master)
 ![npm](https://img.shields.io/npm/v/@nervos/web3.svg)
 
-# Getting Started
+# About
 
 `@nervos/web3` is a high-order function takes `provider` and `Web3 Class`(optional) as inputs, returns nervos-supported web3 instance.
+
+# Version
+
+`@nervos/web3` strictly abides by Semver, and is compatible with [CITA](https://github.com/cryptape/cita) by `MAJOR` and `MINOR` version, e.g. `@nervos/web3@0.17.x` will work perfectly with `CITA@0.17`
+
+# Getting Started
 
 To use `@nervos/web3', you can add it via npm
 
@@ -125,9 +131,7 @@ nervos.appchain.getBlockByNumber(0)
  * @param {string} - block hash
  * @return {Promise<Block>} Promise returns block
  */
-nervos.appchain.getBlockByHash(
-  '0x0c56def738d15d9dfaad64ad246e8b5fe39e175ce3da308ea1018869522a1a4d',
-)
+nervos.appchain.getBlockByHash('0x0c56def738d15d9dfaad64ad246e8b5fe39e175ce3da308ea1018869522a1a4d')
 ```
 
 ### getBlockNumber
@@ -155,9 +159,7 @@ nervos.appchain.getBlockNumber()
  * @param {string} - account address
  * @return {Promise<number>} Promise returns transaction count of account address
  */
-nervos.appchain.getTransactionCount(
-  '0xb3f940e3b5F0AA26dB9f86F0824B3581fE18E9D7',
-)
+nervos.appchain.getTransactionCount('0xb3f940e3b5F0AA26dB9f86F0824B3581fE18E9D7')
 ```
 
 ### newMessageFilter
@@ -170,9 +172,7 @@ nervos.appchain.getTransactionCount(
  */
 
 const topics = {
-  topics: [
-    '0x8fb1356be6b2a4e49ee94447eb9dcb8783f51c41dcddfe7919f945017d163bf3',
-  ],
+  topics: ['0x8fb1356be6b2a4e49ee94447eb9dcb8783f51c41dcddfe7919f945017d163bf3'],
 }
 nervos.appchain.newMessageFilter(topics)
 ```
@@ -325,6 +325,16 @@ const transaction = {
   value: '0x0',
 }
 web3.appchain.deploy(bytecode, tx)
+```
+
+### Store Abi
+
+```javascript
+const abi = JSON.parse(
+  '[{"constant":false,"inputs":[{"name":"_value","type":"uint256"}],"name":"set","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"get","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}]',
+)
+
+const receipt = nervos.appchain.storeAbi(contractAddress, abiString, transaction)
 ```
 
 ### Invoke Contract
