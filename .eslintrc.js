@@ -9,9 +9,11 @@ module.exports = {
     ],
     'rules': {
         "prettier/prettier": ["error", {
-            "singleQuote": true
+            "singleQuote": true,
+            "semi": false,
+            "traillingComma": true,
         }],
-        'quotes': ['error', 'single']
+        'quotes': ['error', 'single'],
     },
     'parserOptions': {
         'ecmaVersion': 6,
