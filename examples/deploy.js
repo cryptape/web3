@@ -32,12 +32,15 @@ const deploy = async () => {
   console.log(chalk.green.bold('Sending Trasnaction'));
   divider();
   console.log(chalk.green(JSON.stringify(tx, null, 2)));
+  // method 1, step by step
   const res = await web3.appchain.deploy(tx.data, tx);
   console.log(chalk.blue.bold('Received Result'));
   divider();
   console.log(chalk.blue(JSON.stringify(res, null, 2)));
   const contract = new web3.appchain.Contract(abi, res.contractAddress);
   return contract;
+  // method 2, standard web3 api
+  // contract = await new web3.appchain.Contract(abi).deploy({data: bytecode}).send(tx)
 };
 
 const callMethod = async contract => {
@@ -57,7 +60,7 @@ const setMethod = async contract => {
     validUntilBlock: +current + 88
   };
   const res = await contract.methods.set(5).send(tx);
-  console.log(chalk.blue.bold('Received Receipt'));
+  console.log(chalk.blue.bold('Received Send Result'));
   console.log(chalk.blue(JSON.stringify(res, null, 2)));
   setTimeout(() => {
     callMethod(contract);

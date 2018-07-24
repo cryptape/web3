@@ -1,12 +1,16 @@
-import Web3 from 'web3';
-import * as rpc from './rpc';
-import * as personal from './neuron';
+import Web3 from 'web3'
+import signer, { unsigner } from '@nervos/signer'
+import * as rpc from './rpc'
+import * as personal from './neuron'
+import listener from './listener'
+import addPrivateKeyFrom from '../utils/addPrivateKey'
 
-export default (
-  web3: Web3 & {
-    appchain?: any;
-  }
-) => {
+export interface EnhancedWeb3 extends Web3 {
+  appchain?: any
+  listeners?: any
+}
+
+export default (web3: EnhancedWeb3) => {
   web3.extend({
     property: 'appchain',
     methods: [
@@ -45,59 +49,90 @@ export default (
       personal.sign,
       personal.ecRecover
     ]
-  });
+  })
   // add contract
-  web3.appchain.Contract = web3.eth.Contract;
+  web3.appchain.Contract = web3.eth.Contract
+  web3 = listener(web3) as any
+  web3.appchain.signer = signer
+  web3.appchain.unsigner = unsigner
 
   web3.appchain.deploy = async (bytecode: string, transaction: any) => {
-    // const { chainId } = (await web3.appchain.metadata({
-    //   blockNumber: 'latest',
-    // })) as any
-
     const currentHeight = await web3.appchain
       .getBlockNumber()
       .catch((err: any) => {
-        console.error(err);
-      });
+        console.error(err)
+      })
 
-    const tx = {
+    const _tx = {
       version: 0,
       value: 0,
       nonce: Math.round(Math.random() * 10),
       ...transaction,
       data: bytecode.startsWith('0x') ? bytecode : '0x' + bytecode,
       validUntilBlock: +currentHeight + 88
-      // chainId,
-    };
+    }
+
+    const tx = addPrivateKeyFrom(web3.eth.accounts.wallet)(_tx)
+
     const result = await web3.appchain.sendTransaction(tx).catch((err: any) => {
-      console.error(err);
-    });
+      throw new Error(err)
+    })
 
     if (!result.hash) {
-      return new Error('No Transaction Hash Received');
+      return new Error('No Transaction Hash Received')
     }
-    let remain = 10;
-    return new Promise((resolve, reject) => {
-      let interval = setInterval(() => {
-        remain = remain - 1;
-        if (remain > 0) {
-          web3.appchain.getTransactionReceipt(result.hash).then((res: any) => {
-            if (res) {
-              clearInterval(interval);
-              resolve(res);
-            }
-          });
-        } else {
-          reject('No Receipt Received');
-        }
-      }, 1000);
-    }).catch((err: any) => {
-      console.error(err);
-    });
-  };
+    return web3.listeners.listenToTransactionReceipt(result.hash)
+  }
+  web3.appchain._abiAddress = 'ffffffffffffffffffffffffffffffffff010001'
+  Object.defineProperty(web3.appchain, 'abiAddress', {
+    get: () => {
+      return web3.appchain._abiAddress
+    },
+    set: (newAddr: string) => {
+      if (web3.utils.isAddress(newAddr)) {
+        web3.appchain._abiAddress = newAddr.replace(/^0x/, '')
+      } else {
+        throw new Error('Not valid address')
+      }
+    }
+  })
+  web3.appchain.storeAbi = async (
+    contractAddress: string,
+    abi: string,
+    options: any
+  ) => {
+    if (!contractAddress) {
+      throw new Error('Store ABI needs contract address')
+    }
+    if (!Array.isArray(abi)) {
+      throw new Error('ABI should be Array type')
+    }
+    const _tx = {
+      version: 0,
+      value: 0,
+      nonce: Math.round(Math.random() * 10),
+      ...options,
+      to: web3.appchain.abiAddress
+    }
+    const transaction = addPrivateKeyFrom(web3.eth.accounts.wallet)(_tx)
+    try {
+      const abiBytes = (web3.utils as any)
+        .utf8ToHex(JSON.stringify(abi))
+        .slice(2)
+      transaction.data = contractAddress.replace(/^0x/i, '') + abiBytes
+    } catch (err) {
+      throw new Error(err)
+    }
+    const txResult = await web3.appchain.sendTransaction(transaction)
+    const txReceipt = await web3.listeners.listenToTransactionReceipt(
+      txResult.hash
+    )
+    return txReceipt
+  }
   const neuron = {
     sign: web3.appchain.neuron_sign
-  };
-  web3.appchain.personal = neuron;
-  return web3;
-};
+  }
+  web3.appchain.personal = neuron
+
+  return web3
+}

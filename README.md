@@ -1,9 +1,15 @@
 ![Build Status](https://travis-ci.org/cryptape/web3.svg?branch=master)
 ![npm](https://img.shields.io/npm/v/@nervos/web3.svg)
 
-# Getting Started
+# About
 
 `@nervos/web3` is a high-order function takes `provider` and `Web3 Class`(optional) as inputs, returns nervos-supported web3 instance.
+
+# Version
+
+`@nervos/web3` strictly abides by Semver, and is compatible with [CITA](https://github.com/cryptape/cita) by `MAJOR` and `MINOR` version, e.g. `@nervos/web3@0.17.x` will work perfectly with `CITA@0.17`
+
+# Getting Started
 
 To use `@nervos/web3', you can add it via npm
 
@@ -125,9 +131,7 @@ nervos.appchain.getBlockByNumber(0)
  * @param {string} - block hash
  * @return {Promise<Block>} Promise returns block
  */
-nervos.appchain.getBlockByHash(
-  '0x0c56def738d15d9dfaad64ad246e8b5fe39e175ce3da308ea1018869522a1a4d',
-)
+nervos.appchain.getBlockByHash('0x0c56def738d15d9dfaad64ad246e8b5fe39e175ce3da308ea1018869522a1a4d')
 ```
 
 ### getBlockNumber
@@ -155,9 +159,7 @@ nervos.appchain.getBlockNumber()
  * @param {string} - account address
  * @return {Promise<number>} Promise returns transaction count of account address
  */
-nervos.appchain.getTransactionCount(
-  '0xb3f940e3b5F0AA26dB9f86F0824B3581fE18E9D7',
-)
+nervos.appchain.getTransactionCount('0xb3f940e3b5F0AA26dB9f86F0824B3581fE18E9D7')
 ```
 
 ### newMessageFilter
@@ -170,9 +172,7 @@ nervos.appchain.getTransactionCount(
  */
 
 const topics = {
-  topics: [
-    '0x8fb1356be6b2a4e49ee94447eb9dcb8783f51c41dcddfe7919f945017d163bf3',
-  ],
+  topics: ['0x8fb1356be6b2a4e49ee94447eb9dcb8783f51c41dcddfe7919f945017d163bf3'],
 }
 nervos.appchain.newMessageFilter(topics)
 ```
@@ -290,7 +290,7 @@ nervos.appchain.sendSignedTransaction(signedTransaction)
  * @return {Promise<object>} Promise returns transaction receipt
  */
 
-nervos.appchain.sendSignedTransaction(signedTransaction)
+nervos.appchain.getTransactionReceipt(transactionHash)
 ```
 
 ### getTransaction
@@ -325,6 +325,18 @@ const transaction = {
   value: '0x0',
 }
 web3.appchain.deploy(bytecode, tx)
+// or
+// contract = await new web3.appchain.Contract(abi).deploy({data: bytecode}).send(tx)
+```
+
+### Store Abi
+
+```javascript
+const abi = JSON.parse(
+  '[{"constant":false,"inputs":[{"name":"_value","type":"uint256"}],"name":"set","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"get","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}]',
+)
+
+const receipt = nervos.appchain.storeAbi(contractAddress, abiString, transaction)
 ```
 
 ### Invoke Contract
@@ -340,4 +352,34 @@ contract.methods.get().call()
 
 // send method
 contract.methods.set(5).send(transaction)
+```
+
+## Utils API
+
+### signer
+
+```javascript
+nervos.appchain.signer({
+  privateKey: '0x7cc34429d268cdf33e1595d9aa3c56bfcb785c24b7f6dd031fe059d93d8e92d9',
+  data:
+    '6060604052341561000f57600080fd5b60d38061001d6000396000f3006060604052600436106049576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806360fe47b114604e5780636d4ce63c14606e575b600080fd5b3415605857600080fd5b606c60048080359060200190919050506094565b005b3415607857600080fd5b607e609e565b6040518082815260200191505060405180910390f35b8060008190555050565b600080549050905600a165627a7a723058202d9a0979adf6bf48461f24200e635bc19cd1786efbcfc0608eb1d76114d405860029',
+  nonce: '47',
+  quota: 999999,
+  validUntilBlock: 114930,
+  version: 0,
+  chainId: 1,
+  value: '0',
+})
+```
+
+### unsigner
+
+```javascript
+nervos.appchain.unsigner(transactionContent)
+```
+
+### TransactionReceiptListener
+
+```javascript
+nervos.listeners.listenToTransactionReceipt(result.hash).then(console.log)
 ```
