@@ -1,10 +1,4 @@
-const {
-  nervos,
-  bytecode,
-  privateKey,
-  abi,
-  tx
-} = require('./config')
+const { nervos, bytecode, privateKey, abi, tx } = require('./config')
 
 const inquireReceipt = txHash =>
   new Promise((resolve, reject) => {
@@ -38,7 +32,7 @@ test('sendTransaction, getTransactionReceipt, and getTransaction', async () => {
   const currentHeight = await nervos.appchain.getBlockNumber()
   const result = await nervos.appchain.sendTransaction({
     ...tx,
-    validUntilBlock: +currentHeight + 88,
+    validUntilBlock: +currentHeight + 88
   })
   expect(result.status).toBe('OK')
   expect(result.hash.startsWith('0x')).toBe(true)
@@ -70,7 +64,7 @@ test('transfer', async () => {
     validUntilBlock: +currentHeight + 88,
     data: '',
     value: '0xff',
-    to,
+    to
   })
   expect(result.status).toBe('OK')
   expect(result.hash.startsWith('0x')).toBe(true)
@@ -117,9 +111,7 @@ test('store abi', async () => {
     ...tx,
     validUntilBlock: +currentHeight + 88
   })
-  const {
-    contractAddress
-  } = contractReuslt
+  const { contractAddress } = contractReuslt
   const receipt = await nervos.appchain.storeAbi(contractAddress, abi, {
     ...tx,
     validUntilBlock: +currentHeight + 88

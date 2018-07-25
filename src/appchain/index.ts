@@ -56,19 +56,37 @@ export default (web3: EnhancedWeb3) => {
   web3.appchain.signer = signer
   web3.appchain.unsigner = unsigner
 
-  web3.appchain.deploy = async (bytecode: string, transaction: any) => {
+  web3.appchain.deploy = async (
+    contract: string | { code: string; initTypes: string[]; args: any[] },
+    transaction: any
+  ) => {
     const currentHeight = await web3.appchain
       .getBlockNumber()
       .catch((err: any) => {
         console.error(err)
       })
+    let bytecode = ''
+    let paramaters = []
+    let types: string[] = []
+    let encodedArgs = ''
+    if (typeof contract === 'string') {
+      bytecode = contract
+    } else if (contract.code) {
+      bytecode = contract.code
+      paramaters = contract.args || []
+      types = contract.initTypes || []
+    }
+    if (paramaters.length) {
+      encodedArgs = web3.eth.abi.encodeParameters(types, paramaters)
+    }
+    console.log(encodedArgs)
 
     const _tx = {
       version: 0,
       value: 0,
       nonce: Math.round(Math.random() * 10),
       ...transaction,
-      data: bytecode.startsWith('0x') ? bytecode : '0x' + bytecode,
+      data: bytecode.replace(/^0x/, '') + encodedArgs,
       validUntilBlock: +currentHeight + 88
     }
 

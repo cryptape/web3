@@ -325,8 +325,8 @@ const transaction = {
   value: '0x0',
 }
 web3.appchain.deploy(bytecode, tx)
-// or
-// contract = await new web3.appchain.Contract(abi).deploy({data: bytecode}).send(tx)
+// or web3.appchain.deploy({code, types, args}, tx) if the contract should be instantiated with arguments, code => bytecode, type => argsType, args => initialValues
+// or txResult = await new web3.appchain.Contract(abi).deploy({data: bytecode}).send(tx) if you'd like standard web3 api
 ```
 
 ### Store Abi
@@ -378,7 +378,7 @@ nervos.appchain.signer({
 nervos.appchain.unsigner(transactionContent)
 ```
 
-### TransactionReceiptListener
+### transactionReceiptListener
 
 ```javascript
 nervos.listeners.listenToTransactionReceipt(result.hash).then(console.log)
